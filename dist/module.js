@@ -28875,37 +28875,62 @@ var TrackMapPanel = function TrackMapPanel(_a) {
   var markerTooltips = [];
   timestampsData === null || timestampsData === void 0 ? void 0 : timestampsData.forEach(function (ts, i) {
     ts.forEach(function (t, j) {
-      var ll = labelsData && labelsData[i][j];
+      var ll = labelsData && labelsData[i][0];
       var track = ll && ll['track'];
-      var trackIndex = track && tracksIndex[track];
+      var trackIndex = 0;
 
-      if (latitudes && trackIndex && latitudesData) {
-        latitudes[trackIndex] = latitudes[trackIndex] !== undefined ? latitudes[trackIndex].concat(latitudesData[i][j]) : latitudes[trackIndex] = latitudesData[i][j];
+      if (track && tracksIndex[track] > 0) {
+        trackIndex = tracksIndex[track];
       }
 
-      if (longitudes && trackIndex && longitudesData) {
-        longitudes[trackIndex] = longitudes[trackIndex] !== undefined ? longitudes[trackIndex].concat(longitudesData[i][j]) : longitudes[trackIndex] = longitudesData[i][j];
+      if (latitudes && latitudesData) {
+        if (latitudes[trackIndex] !== undefined) {
+          latitudes[trackIndex] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(latitudes[trackIndex], [latitudesData[i][trackIndex][j]]);
+        } else {
+          latitudes[trackIndex] = [latitudesData[i][trackIndex][j]];
+        }
       }
 
-      if (timestamps && trackIndex) {
-        timestamps[trackIndex] = timestamps[trackIndex] !== undefined ? timestamps[trackIndex].concat([t]) : timestamps[trackIndex] = [t];
+      if (longitudes && longitudesData) {
+        if (longitudes[trackIndex] !== undefined) {
+          longitudes[trackIndex] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(longitudes[trackIndex], [longitudesData[i][trackIndex][j]]);
+        } else {
+          longitudes[trackIndex] = [longitudesData[i][trackIndex][j]];
+        }
       }
 
-      if (labels && trackIndex) {
+      if (timestamps && timestampsData) {
+        if (timestamps[trackIndex] !== undefined) {
+          timestamps[trackIndex].push(t);
+        } else {
+          timestamps[trackIndex] = [t];
+        }
+      }
+
+      if (labels) {
         labels[trackIndex] = ll;
-      }
+      } //if (intensities && intensitiesData) {
+      //if (intensities[trackIndex] !== undefined) {
+      //intensities[trackIndex] = [...intensities[trackIndex], intensitiesData[i][trackIndex][j]];
+      //} else {
+      //intensities[trackIndex] = [intensitiesData[i][trackIndex][j]];
+      //}
+      //}
+      //if (markerPopups && markerPopupsData) {
+      //if (markerPopups[trackIndex] !== undefined) {
+      //markerPopups[trackIndex] = [...markerPopups[trackIndex], markerPopupsData[i][trackIndex][j]];
+      //} else {
+      //markerPopups[trackIndex] = [markerPopupsData[i][trackIndex][j]];
+      //}
+      //}
+      //if (markerTooltips && markerTooltipsData) {
+      //if (markerTooltips[trackIndex] !== undefined) {
+      //markerTooltips[trackIndex] = [...markerTooltips[trackIndex], markerTooltipsData[i][trackIndex][j]];
+      //} else {
+      //markerTooltips[trackIndex] = [markerTooltipsData[i][trackIndex][j]];
+      //}
+      //}
 
-      if (intensities && trackIndex && intensitiesData) {
-        intensities[trackIndex] = intensities[trackIndex] !== undefined ? intensities[trackIndex].concat(intensitiesData[i][j]) : intensities[trackIndex] = intensitiesData[i][j];
-      }
-
-      if (markerPopups && trackIndex && markerPopupsData) {
-        markerPopups[trackIndex] = markerPopups[trackIndex] !== undefined ? markerPopups[trackIndex].concat(markerPopupsData[i][j]) : markerPopups[trackIndex] = markerPopupsData[i][j];
-      }
-
-      if (markerTooltips && trackIndex && markerTooltipsData) {
-        markerTooltips[trackIndex] = markerTooltips[trackIndex] !== undefined ? markerTooltips[trackIndex].concat(markerTooltipsData[i][j]) : markerTooltips[trackIndex] = markerTooltipsData[i][j];
-      }
     });
   });
   var liveness = latitudes.map(function (ls) {
@@ -28925,21 +28950,23 @@ var TrackMapPanel = function TrackMapPanel(_a) {
     });
   }
 
-  var positions = latitudes === null || latitudes === void 0 ? void 0 : latitudes.map(function (lats, index1) {
-    return lats.map(function (latitude, index2) {
+  var positions = [];
+  latitudes === null || latitudes === void 0 ? void 0 : latitudes.forEach(function (lats, index1) {
+    positions[index1] = [];
+    lats.forEach(function (latitude, index2) {
       var longitude = longitudes !== undefined && longitudes.length && longitudes[index1] !== undefined ? longitudes[index1][index2] : 0;
       var timestamp = timestamps !== undefined && timestamps.length && timestamps[index1] !== undefined ? timestamps[index1][index2] : 0;
       var trackLabels = labels && labels[index1] ? labels[index1] : undefined;
       var popup = markerPopups !== undefined && markerPopups.length && markerPopups[index1] !== undefined ? markerPopups[index1][index2] : "LatLon: (" + latitude + ", " + longitude + ")\nTimestamp: " + timestamp + "\nLabels:\n" + (trackLabels ? JSON.stringify(trackLabels, null, 2) : '') + "\n";
       var tooltip = markerTooltips !== undefined && markerTooltips.length && markerTooltips[index1] !== undefined ? markerTooltips[index1][index2] : undefined; // const icon = iconNames !== undefined ? iconNames[index1][index2] : undefined;
 
-      return {
+      positions[index1].push({
         latitude: latitude,
         longitude: longitude,
         popup: popup,
         tooltip: tooltip,
         labels: trackLabels
-      };
+      });
     });
   });
 

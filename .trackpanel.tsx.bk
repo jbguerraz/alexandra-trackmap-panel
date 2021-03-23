@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useRef } from 'react';
-import { Labels, PanelProps, Field } from '@grafana/data';
+import { Labels, PanelProps } from '@grafana/data';
 import { Position, TrackMapOptions, AntData } from 'types';
 import { css, cx } from 'emotion';
 import { Feature, FeatureCollection } from 'geojson';
@@ -77,150 +77,85 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
 
   const getMarkerHtmlOverrides = getMarkerHtmlOverridesMemoized();
 
-  const tracksIndex: Record<string, number> = data.series
-    .reduce((fields, serie) => fields.concat(serie.fields), [] as any[])
-    .map((field) => field.labels && field.labels['track'])
-    .filter((track) => track !== undefined)
-    .reduce((tracks, track, index) => (tracks[track] === undefined ? { ...tracks, [track]: index } : tracks), {});
-
-  let timestampsData: number[][] | undefined = data.series
+  let timestamps: number[][] | undefined = data.series
     .reduce((a, s) => a.concat(s.fields), [] as any[])
     .filter((f) => f.name === 'timestamp' || f.name === 'time')
     .map((f) => f.values?.toArray() as number[]);
 
-  let latitudesData: number[][][] | undefined = data.series.map((s) =>
+  let latitudes: number[][][] | undefined = data.series.map((s) =>
     s.fields.filter((f) => f.name === 'latitude' || f.name === 'lat').map((f) => f.values?.toArray() as number[])
   );
 
-  let longitudesData: number[][][] | undefined = data.series.map((s) =>
+  let longitudes: number[][][] | undefined = data.series.map((s) =>
     s.fields.filter((f) => f.name === 'longitude' || f.name === 'lon').map((f) => f.values?.toArray() as number[])
   );
 
-  let labelsData: Array<Array<Labels | undefined>> = data.series.map((s) =>
+  let labels: Array<Array<Labels | undefined>> = data.series.map((s) =>
     s.fields.filter((f) => f.name === 'latitude' || f.name === 'lat').map((f) => f.labels)
   );
 
-  let intensitiesData: number[][][] | undefined = data.series.map((s) =>
+  let intensities: number[][][] | undefined = data.series.map((s) =>
     s.fields.filter((f) => f.name === 'intensity').map((f) => f.values?.toArray() as number[])
   );
 
-  let markerPopupsData: string[][][] | undefined = data.series.map((s) =>
+  let markerPopups: string[][][] | undefined = data.series.map((s) =>
     s.fields
       .filter((f) => f.name === 'popup' || f.name === 'text' || f.name === 'desc')
       .map((f) => f.values?.toArray() as string[])
   );
 
-  let markerTooltipsData: string[][][] | undefined = data.series.map((s) =>
+  let markerTooltips: string[][][] | undefined = data.series.map((s) =>
     s.fields.filter((f) => f.name === 'tooltip').map((f) => f.values?.toArray() as string[])
   );
 
-  let latitudes: number[][] | undefined = [] as number[][];
-  let longitudes: number[][] | undefined = [] as number[][];
-  let timestamps: number[][] | undefined = [] as number[][];
-  let labels: Array<Labels | undefined> = [] as Labels[];
-  let intensities: number[][] | undefined = [] as number[][];
-  let markerPopups: string[][] | undefined = [] as string[][];
-  let markerTooltips: string[][] | undefined = [] as string[][];
-
-  timestampsData?.forEach((ts, i) => {
-    ts.forEach((t, j) => {
-      const ll = labelsData && labelsData[i][j];
-      const track = ll && ll['track'];
-      const trackIndex = track && tracksIndex[track];
-      if (latitudes && trackIndex && latitudesData) {
-        latitudes[trackIndex] =
-          latitudes[trackIndex] !== undefined
-            ? latitudes[trackIndex].concat(latitudesData[i][j])
-            : (latitudes[trackIndex] = latitudesData[i][j]);
-      }
-      if (longitudes && trackIndex && longitudesData) {
-        longitudes[trackIndex] =
-          longitudes[trackIndex] !== undefined
-            ? longitudes[trackIndex].concat(longitudesData[i][j])
-            : (longitudes[trackIndex] = longitudesData[i][j]);
-      }
-      if (timestamps && trackIndex) {
-        timestamps[trackIndex] =
-          timestamps[trackIndex] !== undefined ? timestamps[trackIndex].concat([t]) : (timestamps[trackIndex] = [t]);
-      }
-      if (labels && trackIndex) {
-        labels[trackIndex] = ll;
-      }
-      if (intensities && trackIndex && intensitiesData) {
-        intensities[trackIndex] =
-          intensities[trackIndex] !== undefined
-            ? intensities[trackIndex].concat(intensitiesData[i][j])
-            : (intensities[trackIndex] = intensitiesData[i][j]);
-      }
-      if (markerPopups && trackIndex && markerPopupsData) {
-        markerPopups[trackIndex] =
-          markerPopups[trackIndex] !== undefined
-            ? markerPopups[trackIndex].concat(markerPopupsData[i][j])
-            : (markerPopups[trackIndex] = markerPopupsData[i][j]);
-      }
-      if (markerTooltips && trackIndex && markerTooltipsData) {
-        markerTooltips[trackIndex] =
-          markerTooltips[trackIndex] !== undefined
-            ? markerTooltips[trackIndex].concat(markerTooltipsData[i][j])
-            : (markerTooltips[trackIndex] = markerTooltipsData[i][j]);
-      }
-    });
-  });
-
   let liveness: boolean[] = latitudes.map((ls) => ls[ls.length - 1] !== null);
 
-  let iconHtml: Array<string | undefined> | undefined;
+  let iconHtml: Array<Array<string | undefined>> | undefined;
 
   if (labels && labels.length) {
-    iconHtml = labels.map((l: Labels | undefined) => {
-      const overrides = getMarkerHtmlOverrides();
-      if (l && l[options.marker.labelName] && overrides[l[options.marker.labelName]]) {
-        return overrides[l[options.marker.labelName]];
-      }
-      return undefined;
-    });
+    iconHtml = labels.map((s) =>
+      s.map((l: Labels | undefined) => {
+        const overrides = getMarkerHtmlOverrides();
+        if (l && l[options.marker.labelName] && overrides[l[options.marker.labelName]]) {
+          return overrides[l[options.marker.labelName]];
+        }
+        return undefined;
+      })
+    );
   }
 
-  let positions: Position[][] | undefined = latitudes?.map((lats, index1) => {
-    return lats.map((latitude, index2) => {
-      const longitude =
-        longitudes !== undefined && longitudes.length && longitudes[index1] !== undefined
-          ? longitudes[index1][index2]
-          : 0;
+  let positions: Position[][] | undefined = [
+    [{ time: 123, latitude: 1, longitude: 1, popup: 'ok', tooltip: 'ok', labels: { abc: 'ok' } }],
+    [{ time: 123, latitude: 1, longitude: 1, popup: 'ok', tooltip: 'ok', labels: { abc: 'ok' } }],
+  ];
 
-      const timestamp =
-        timestamps !== undefined && timestamps.length && timestamps[index1] !== undefined
-          ? timestamps[index1][index2]
-          : 0;
+  timestamps?.forEach((ts, i) => {
+ts.forEach((t,j) => {
+{
+t,
+latitudes[i][j]
+longitude[i][j]
 
-      const trackLabels = labels && labels[index1] ? labels[index1] : undefined;
+positions[trackIndex].push(position);
+})
+  })
 
-      const popup =
-        markerPopups !== undefined && markerPopups.length && markerPopups[index1] !== undefined
-          ? markerPopups[index1][index2]
-          : `LatLon: (${latitude}, ${longitude})
-Timestamp: ${timestamp}
-Labels:
-${trackLabels ? JSON.stringify(trackLabels, null, 2) : ''}
-`;
-      const tooltip =
-        markerTooltips !== undefined && markerTooltips.length && markerTooltips[index1] !== undefined
-          ? markerTooltips[index1][index2]
-          : undefined;
-      // const icon = iconNames !== undefined ? iconNames[index1][index2] : undefined;
-      return {
-        latitude,
-        longitude,
-        popup,
-        tooltip,
-        labels: trackLabels,
-        // icon,
-      };
-    });
-  });
+
+  //time?.map((lats, index1) => {
+  //return {
+  //timestamp,
+  //latitude,
+  //longitude,
+  //popup,
+  //tooltip,
+  //labels: trackLabels,
+  //// icon,
+  //};
+  //});
+  //});
 
   if (!positions || positions.length === 0) {
-    positions = [[{ latitude: 0, longitude: 0 }]];
+    positions = [[{ time: 0, latitude: 0, longitude: 0 }]];
   }
 
   const heatData: any[][] = [];
@@ -247,7 +182,7 @@ ${trackLabels ? JSON.stringify(trackLabels, null, 2) : ''}
       antOptions.paused = true;
     }
 
-    const currentLabels = labels[i];
+    const currentLabels = labels[0][i];
     if (options.ant.labelName && currentLabels && currentLabels[options.ant.labelName]) {
       const override = getAntPathColorOverrides()[currentLabels[options.ant.labelName]];
       if (override) {
@@ -292,7 +227,7 @@ ${trackLabels ? JSON.stringify(trackLabels, null, 2) : ''}
           const isLastPosition = j + 1 === ps?.length;
           let html = options.marker.defaultHtml;
           if (iconHtml && iconHtml.length) {
-            const maybeHtml = iconHtml[i];
+            const maybeHtml = iconHtml[0][i];
             if (maybeHtml !== undefined) {
               html = maybeHtml;
             }
@@ -392,6 +327,7 @@ ${trackLabels ? JSON.stringify(trackLabels, null, 2) : ''}
     }
   };
   const mapCenter: Position = {
+    time: 0,
     latitude: options.map.centerLatitude,
     longitude: options.map.centerLongitude,
   };

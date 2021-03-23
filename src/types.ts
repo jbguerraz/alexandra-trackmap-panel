@@ -13,6 +13,7 @@ export interface TrackMapOptions {
   marker: MarkerOptions;
   hex: HexOptions;
   discardZeroOrNull: boolean;
+  trackFromLabel: string;
 }
 
 interface Map {
@@ -74,6 +75,6 @@ export interface Position {
   longitude: number;
   popup?: string;
   tooltip?: string;
-  icon?: string;
   labels?: Labels;
+  icon?: string;
 }

@@ -28814,6 +28814,14 @@ var TrackMapPanel = function TrackMapPanel(_a) {
 
     return (_a = f.values) === null || _a === void 0 ? void 0 : _a.toArray();
   });
+  /* 2 series 3 locomotives
+  0: Array(2)
+    0: Float64Array(10) [0, 49.169358, 0, 49.169358, 0, 49.169358, 0, 49.169358, 0, 49.169358]
+    1: Float64Array(10) [47.758088, 0, 47.758088, 0, 47.758088, 0, 47.758088, 0, 47.758088, 0]
+  1: Array(1)
+    0: Float64Array(5) [49.243383, 49.243383, 49.243383, 49.243383, 49.243383]
+  */
+
   var latitudesData = data.series.map(function (s) {
     return s.fields.filter(function (f) {
       return f.name === 'latitude' || f.name === 'lat';
@@ -28873,9 +28881,10 @@ var TrackMapPanel = function TrackMapPanel(_a) {
   var intensities = [];
   var markerPopups = [];
   var markerTooltips = [];
-  timestampsData === null || timestampsData === void 0 ? void 0 : timestampsData.forEach(function (ts, i) {
-    ts.forEach(function (t, j) {
-      var ll = labelsData && labelsData[i][0];
+  labelsData === null || labelsData === void 0 ? void 0 : labelsData.forEach(function (serie, serieIdx) {
+    serie.forEach(function (ll, trackIdx) {
+      var _a;
+
       var track = ll && ll['track'];
       var trackIndex = 0;
 
@@ -28883,52 +28892,60 @@ var TrackMapPanel = function TrackMapPanel(_a) {
         trackIndex = tracksIndex[track];
       }
 
-      if (latitudes && latitudesData) {
-        if (latitudes[trackIndex] !== undefined) {
-          latitudes[trackIndex] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(latitudes[trackIndex], [latitudesData[i][trackIndex][j]]);
-        } else {
-          latitudes[trackIndex] = [latitudesData[i][trackIndex][j]];
-        }
-      }
+      if (timestampsData !== undefined) {
+        (_a = timestampsData[serieIdx]) === null || _a === void 0 ? void 0 : _a.forEach(function (t, tIdx) {
+          var latitude = latitudesData && latitudesData[serieIdx][trackIdx][tIdx];
+          var longitude = longitudesData && longitudesData[serieIdx][trackIdx][tIdx];
 
-      if (longitudes && longitudesData) {
-        if (longitudes[trackIndex] !== undefined) {
-          longitudes[trackIndex] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(longitudes[trackIndex], [longitudesData[i][trackIndex][j]]);
-        } else {
-          longitudes[trackIndex] = [longitudesData[i][trackIndex][j]];
-        }
-      }
+          if (latitude !== 0 && longitude !== 0) {
+            if (latitudes && latitudesData) {
+              if (latitudes[trackIndex] !== undefined) {
+                latitudes[trackIndex] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(latitudes[trackIndex], [latitudesData[serieIdx][trackIdx][tIdx]]);
+              } else {
+                latitudes[trackIndex] = [latitudesData[serieIdx][trackIdx][tIdx]];
+              }
+            }
 
-      if (timestamps && timestampsData) {
-        if (timestamps[trackIndex] !== undefined) {
-          timestamps[trackIndex].push(t);
-        } else {
-          timestamps[trackIndex] = [t];
-        }
-      }
+            if (longitudes && longitudesData) {
+              if (longitudes[trackIndex] !== undefined) {
+                longitudes[trackIndex] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(longitudes[trackIndex], [longitudesData[serieIdx][trackIdx][tIdx]]);
+              } else {
+                longitudes[trackIndex] = [longitudesData[serieIdx][trackIdx][tIdx]];
+              }
+            }
+          }
+        });
+      } //if (timestamps && timestampsData) {
+      //  if (timestamps[trackIndex] !== undefined) {
+      //    timestamps[trackIndex].push(t);
+      //  } else {
+      //    timestamps[trackIndex] = [t];
+      //  }
+      //}
+
 
       if (labels) {
         labels[trackIndex] = ll;
       } //if (intensities && intensitiesData) {
-      //if (intensities[trackIndex] !== undefined) {
-      //intensities[trackIndex] = [...intensities[trackIndex], intensitiesData[i][trackIndex][j]];
-      //} else {
-      //intensities[trackIndex] = [intensitiesData[i][trackIndex][j]];
-      //}
+      //  if (intensities[trackIndex] !== undefined) {
+      //    intensities[trackIndex] = [...intensities[trackIndex], intensitiesData[i][0][j]];
+      //  } else {
+      //    intensities[trackIndex] = [intensitiesData[i][0][j]];
+      //  }
       //}
       //if (markerPopups && markerPopupsData) {
-      //if (markerPopups[trackIndex] !== undefined) {
-      //markerPopups[trackIndex] = [...markerPopups[trackIndex], markerPopupsData[i][trackIndex][j]];
-      //} else {
-      //markerPopups[trackIndex] = [markerPopupsData[i][trackIndex][j]];
-      //}
+      //  if (markerPopups[trackIndex] !== undefined) {
+      //    markerPopups[trackIndex] = [...markerPopups[trackIndex], markerPopupsData[i][0][j]];
+      //  } else {
+      //    markerPopups[trackIndex] = [markerPopupsData[i][0][j]];
+      //  }
       //}
       //if (markerTooltips && markerTooltipsData) {
-      //if (markerTooltips[trackIndex] !== undefined) {
-      //markerTooltips[trackIndex] = [...markerTooltips[trackIndex], markerTooltipsData[i][trackIndex][j]];
-      //} else {
-      //markerTooltips[trackIndex] = [markerTooltipsData[i][trackIndex][j]];
-      //}
+      //  if (markerTooltips[trackIndex] !== undefined) {
+      //    markerTooltips[trackIndex] = [...markerTooltips[trackIndex], markerTooltipsData[i][0][j]];
+      //  } else {
+      //    markerTooltips[trackIndex] = [markerTooltipsData[i][0][j]];
+      //  }
       //}
 
     });
@@ -29175,9 +29192,10 @@ var TrackMapPanel = function TrackMapPanel(_a) {
       mapCenter.longitude = positions[0][0].longitude;
     }
 
-    if (!options.map.useCenterFromFirstPos && options.map.useCenterFromLastPos && positions[0][positions[0].length - 1].latitude) {
-      mapCenter.latitude = positions[0][positions.length - 1].latitude;
-      mapCenter.longitude = positions[0][positions.length - 1].longitude;
+    if (!options.map.useCenterFromFirstPos && options.map.useCenterFromLastPos && positions[positions.length - 1][positions[positions.length - 1].length - 1].latitude) {
+      var lastPosition = positions[positions.length - 1][positions[positions.length - 1].length - 1];
+      mapCenter.latitude = lastPosition.latitude;
+      mapCenter.longitude = lastPosition.longitude;
     }
   }
 

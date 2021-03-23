@@ -88,6 +88,14 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
     .filter((f) => f.name === 'timestamp' || f.name === 'time')
     .map((f) => f.values?.toArray() as number[]);
 
+  /* 2 series 3 locomotives
+0: Array(2)
+	0: Float64Array(10) [0, 49.169358, 0, 49.169358, 0, 49.169358, 0, 49.169358, 0, 49.169358]
+	1: Float64Array(10) [47.758088, 0, 47.758088, 0, 47.758088, 0, 47.758088, 0, 47.758088, 0]
+1: Array(1)
+	0: Float64Array(5) [49.243383, 49.243383, 49.243383, 49.243383, 49.243383]
+*/
+
   let latitudesData: number[][][] | undefined = data.series.map((s) =>
     s.fields.filter((f) => f.name === 'latitude' || f.name === 'lat').map((f) => f.values?.toArray() as number[])
   );
@@ -122,58 +130,65 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
   let markerPopups: string[][] | undefined = [] as string[][];
   let markerTooltips: string[][] | undefined = [] as string[][];
 
-  timestampsData?.forEach((ts, i) => {
-    ts.forEach((t, j) => {
-      const ll = labelsData && labelsData[i][0];
+  labelsData?.forEach((serie, serieIdx) => {
+    serie.forEach((ll, trackIdx) => {
       const track = ll && ll['track'];
       let trackIndex = 0;
       if (track && tracksIndex[track] > 0) {
         trackIndex = tracksIndex[track];
       }
-      if (latitudes && latitudesData) {
-        if (latitudes[trackIndex] !== undefined) {
-	  latitudes[trackIndex] = [...latitudes[trackIndex], latitudesData[i][trackIndex][j]];
-        } else {
-          latitudes[trackIndex] = [latitudesData[i][trackIndex][j]];
-        }
+      if (timestampsData !== undefined) {
+        timestampsData[serieIdx]?.forEach((t, tIdx) => {
+          let latitude = latitudesData && latitudesData[serieIdx][trackIdx][tIdx];
+          let longitude = longitudesData && longitudesData[serieIdx][trackIdx][tIdx];
+          if (latitude !== 0 && longitude !== 0) {
+            if (latitudes && latitudesData) {
+              if (latitudes[trackIndex] !== undefined) {
+                latitudes[trackIndex] = [...latitudes[trackIndex], latitudesData[serieIdx][trackIdx][tIdx]];
+              } else {
+                latitudes[trackIndex] = [latitudesData[serieIdx][trackIdx][tIdx]];
+              }
+            }
+            if (longitudes && longitudesData) {
+              if (longitudes[trackIndex] !== undefined) {
+                longitudes[trackIndex] = [...longitudes[trackIndex], longitudesData[serieIdx][trackIdx][tIdx]];
+              } else {
+                longitudes[trackIndex] = [longitudesData[serieIdx][trackIdx][tIdx]];
+              }
+            }
+          }
+        });
       }
-      if (longitudes && longitudesData) {
-        if (longitudes[trackIndex] !== undefined) {
-	  longitudes[trackIndex] = [...longitudes[trackIndex], longitudesData[i][trackIndex][j]];
-        } else {
-          longitudes[trackIndex] = [longitudesData[i][trackIndex][j]];
-        }
-      }
-      if (timestamps && timestampsData) {
-        if (timestamps[trackIndex] !== undefined) {
-	  timestamps[trackIndex].push(t);
-        } else {
-          timestamps[trackIndex] = [t];
-        }
-      }
+      //if (timestamps && timestampsData) {
+      //  if (timestamps[trackIndex] !== undefined) {
+      //    timestamps[trackIndex].push(t);
+      //  } else {
+      //    timestamps[trackIndex] = [t];
+      //  }
+      //}
       if (labels) {
         labels[trackIndex] = ll;
       }
       //if (intensities && intensitiesData) {
-        //if (intensities[trackIndex] !== undefined) {
-	  //intensities[trackIndex] = [...intensities[trackIndex], intensitiesData[i][trackIndex][j]];
-        //} else {
-          //intensities[trackIndex] = [intensitiesData[i][trackIndex][j]];
-        //}
+      //  if (intensities[trackIndex] !== undefined) {
+      //    intensities[trackIndex] = [...intensities[trackIndex], intensitiesData[i][0][j]];
+      //  } else {
+      //    intensities[trackIndex] = [intensitiesData[i][0][j]];
+      //  }
       //}
       //if (markerPopups && markerPopupsData) {
-        //if (markerPopups[trackIndex] !== undefined) {
-	  //markerPopups[trackIndex] = [...markerPopups[trackIndex], markerPopupsData[i][trackIndex][j]];
-        //} else {
-          //markerPopups[trackIndex] = [markerPopupsData[i][trackIndex][j]];
-        //}
+      //  if (markerPopups[trackIndex] !== undefined) {
+      //    markerPopups[trackIndex] = [...markerPopups[trackIndex], markerPopupsData[i][0][j]];
+      //  } else {
+      //    markerPopups[trackIndex] = [markerPopupsData[i][0][j]];
+      //  }
       //}
       //if (markerTooltips && markerTooltipsData) {
-        //if (markerTooltips[trackIndex] !== undefined) {
-	  //markerTooltips[trackIndex] = [...markerTooltips[trackIndex], markerTooltipsData[i][trackIndex][j]];
-        //} else {
-          //markerTooltips[trackIndex] = [markerTooltipsData[i][trackIndex][j]];
-        //}
+      //  if (markerTooltips[trackIndex] !== undefined) {
+      //    markerTooltips[trackIndex] = [...markerTooltips[trackIndex], markerTooltipsData[i][0][j]];
+      //  } else {
+      //    markerTooltips[trackIndex] = [markerTooltipsData[i][0][j]];
+      //  }
       //}
     });
   });
@@ -421,10 +436,11 @@ ${trackLabels ? JSON.stringify(trackLabels, null, 2) : ''}
     if (
       !options.map.useCenterFromFirstPos &&
       options.map.useCenterFromLastPos &&
-      positions[0][positions[0].length - 1].latitude
+      positions[positions.length - 1][positions[positions.length - 1].length - 1].latitude
     ) {
-      mapCenter.latitude = positions[0][positions.length - 1].latitude;
-      mapCenter.longitude = positions[0][positions.length - 1].longitude;
+      let lastPosition = positions[positions.length - 1][positions[positions.length - 1].length - 1];
+      mapCenter.latitude = lastPosition.latitude;
+      mapCenter.longitude = lastPosition.longitude;
     }
   }
   let antPaths = null;

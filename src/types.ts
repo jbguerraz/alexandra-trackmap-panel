@@ -1,19 +1,18 @@
 import { Labels } from '@grafana/data';
 import { LabelColor } from './colorMapEditor';
-import { KeyValue } from './stringMapEditor';
+import { KeyValueString } from './stringMapEditor';
+import { KeyValueNumber } from './numberMapEditor';
 
-type ViewType = 'ant' | 'hex' | 'heat' | 'marker' | 'ant-marker';
+type ViewType = 'ant' | 'hex' | 'heat' | 'marker';
 
 export interface TrackMapOptions {
   text: string;
   map: Map;
-  viewType: ViewType;
+  viewTypes: ViewType[];
   ant: AntOptions;
   heat: HeatOptions;
   marker: MarkerOptions;
   hex: HexOptions;
-  discardZeroOrNull: boolean;
-  trackFromLabel: string;
 }
 
 interface Map {
@@ -23,23 +22,20 @@ interface Map {
   tileSubDomains: string[];
   centerLatitude: number;
   centerLongitude: number;
-  zoomToDataBounds: boolean;
   zoom: number;
-  useBoundsInQuery: boolean;
-  useCenterFromFirstPos: boolean;
-  useCenterFromLastPos: boolean;
 }
 
 export interface AntOptions {
+  queries: string[];
   delay: number;
   weight: number;
   color: string;
   pulseColor: string;
+  opacity: number;
   paused: boolean;
-  pauseNonLiveTracks: boolean;
-  labelName: string;
-  colorOverridesByLabel: LabelColor[];
   reverse: boolean;
+  colorOverridesByQuery: LabelColor[];
+  zoomToDataBounds: boolean;
 }
 
 export interface AntData {
@@ -48,21 +44,22 @@ export interface AntData {
 }
 
 interface HeatOptions {
+  queries: string[];
   fitBoundsOnLoad: boolean;
   fitBoundsOnUpdate: boolean;
 }
 
 interface MarkerOptions {
+  queries: string[];
+  color: string;
   size: number;
-  showOnlyLastMarker: boolean;
-  showOnlyLiveTracks: boolean;
-  alwaysShowTooltips: boolean;
-  defaultHtml: string;
-  labelName: string;
-  markerHtmlByLabel: KeyValue[];
+  colorOverridesByQuery: LabelColor[];
+  sizeOverridesByQuery: KeyValueNumber[];
+  zoomToDataBounds: boolean;
 }
 
 interface HexOptions {
+  queries: string[];
   opacity: number;
   colorRangeFrom: string;
   colorRangeTo: string;

@@ -28704,18 +28704,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var emotion__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! emotion */ "emotion");
 /* harmony import */ var emotion__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(emotion__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var react_leaflet__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-leaflet */ "../node_modules/react-leaflet/es/index.js");
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! leaflet */ "../node_modules/leaflet/dist/leaflet-src.js");
-/* harmony import */ var leaflet__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(leaflet__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _leaflet_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./leaflet.css */ "./leaflet.css");
-/* harmony import */ var _leaflet_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_leaflet_css__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var leaflet_dist_leaflet_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! leaflet/dist/leaflet.css */ "../node_modules/leaflet/dist/leaflet.css");
-/* harmony import */ var leaflet_dist_leaflet_css__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(leaflet_dist_leaflet_css__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! styled-components */ "../node_modules/styled-components/dist/styled-components.browser.esm.js");
-/* harmony import */ var _grafana_runtime__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @grafana/runtime */ "@grafana/runtime");
-/* harmony import */ var _grafana_runtime__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_grafana_runtime__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
-/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_9__);
-
+/* harmony import */ var _leaflet_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./leaflet.css */ "./leaflet.css");
+/* harmony import */ var _leaflet_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_leaflet_css__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var leaflet_dist_leaflet_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! leaflet/dist/leaflet.css */ "../node_modules/leaflet/dist/leaflet.css");
+/* harmony import */ var leaflet_dist_leaflet_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(leaflet_dist_leaflet_css__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! styled-components */ "../node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var _grafana_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @grafana/runtime */ "@grafana/runtime");
+/* harmony import */ var _grafana_runtime__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_grafana_runtime__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_8__);
 
 
 
@@ -28732,10 +28729,8 @@ var HeatmapLayer = __webpack_require__(/*! react-leaflet-heatmap-layer */ "../no
 
 var HexbinLayer = __webpack_require__(/*! react-leaflet-d3 */ "../node_modules/react-leaflet-d3/dist/react-leaflet-d3.min.js").HexbinLayer;
 
-var StyledPopup = Object(styled_components__WEBPACK_IMPORTED_MODULE_7__["default"])(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Popup"])(templateObject_1 || (templateObject_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__makeTemplateObject"])(["\n  .leaflet-popup-content-wrapper {\n    white-space: pre-wrap;\n  }\n\n  .leaflet-popup-tip-container {\n    visibility: hidden;\n  }\n"], ["\n  .leaflet-popup-content-wrapper {\n    white-space: pre-wrap;\n  }\n\n  .leaflet-popup-tip-container {\n    visibility: hidden;\n  }\n"])));
+var StyledPopup = Object(styled_components__WEBPACK_IMPORTED_MODULE_6__["default"])(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Popup"])(templateObject_1 || (templateObject_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__makeTemplateObject"])(["\n  .leaflet-popup-content-wrapper {\n    white-space: pre-wrap;\n  }\n\n  .leaflet-popup-tip-container {\n    visibility: hidden;\n  }\n"], ["\n  .leaflet-popup-content-wrapper {\n    white-space: pre-wrap;\n  }\n\n  .leaflet-popup-tip-container {\n    visibility: hidden;\n  }\n"])));
 var TrackMapPanel = function TrackMapPanel(_a) {
-  var _b, _c;
-
   var options = _a.options,
       data = _a.data,
       width = _a.width,
@@ -28744,256 +28739,88 @@ var TrackMapPanel = function TrackMapPanel(_a) {
   var mapRef = Object(react__WEBPACK_IMPORTED_MODULE_1__["useRef"])(null);
   var WrappedHexbinLayer = Object(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["withLeaflet"])(HexbinLayer);
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
-    if (mapRef.current !== null) {
-      if (options.map.zoomToDataBounds) {
-        var bounds_1 = getBoundsFromPositions(positions);
-        mapRef.current.leafletElement.fitBounds(bounds_1, {
-          animate: false
-        });
-      }
-
-      var bounds = mapRef.current.leafletElement.getBounds();
-      updateMap(bounds);
-    } // eslint-disable-next-line
-
+    fitDataBounds();
   }, []);
-
-  var getAntPathColorOverridesMemoized = function getAntPathColorOverridesMemoized() {
-    var antPathColorOverrides = {};
-    return function () {
-      var _a;
-
-      if (Object.keys(antPathColorOverrides).length === 0) {
-        if ((_a = options.ant.colorOverridesByLabel) === null || _a === void 0 ? void 0 : _a.length) {
-          options.ant.colorOverridesByLabel.forEach(function (labelColor) {
-            antPathColorOverrides[labelColor.label] = labelColor.color;
-          });
-        }
-      }
-
-      return antPathColorOverrides;
-    };
-  };
-
-  var getMarkerHtmlOverridesMemoized = function getMarkerHtmlOverridesMemoized() {
-    var markerHtmlOverrides = {};
-    return function () {
-      var _a;
-
-      if (Object.keys(markerHtmlOverrides).length === 0) {
-        if ((_a = options.marker.markerHtmlByLabel) === null || _a === void 0 ? void 0 : _a.length) {
-          options.marker.markerHtmlByLabel.forEach(function (keyVal) {
-            markerHtmlOverrides[keyVal.key] = keyVal.value;
-          });
-        }
-      }
-
-      return markerHtmlOverrides;
-    };
-  };
-
-  var getAntPathColorOverrides = getAntPathColorOverridesMemoized();
-  var getMarkerHtmlOverrides = getMarkerHtmlOverridesMemoized();
-  var tracksIndex = data.series.reduce(function (fields, serie) {
-    return fields.concat(serie.fields);
-  }, []).map(function (field) {
-    return field.labels && field.labels['track'];
-  }).filter(function (track) {
-    return track !== undefined;
-  }).reduce(function (tracks, track, index) {
-    var _a;
-
-    return tracks[track] === undefined ? Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, tracks), (_a = {}, _a[track] = index, _a)) : tracks;
-  }, {});
-  var timestampsData = data.series.reduce(function (a, s) {
-    return a.concat(s.fields);
-  }, []).filter(function (f) {
-    return f.name === 'timestamp' || f.name === 'time';
-  }).map(function (f) {
-    var _a;
-
-    return (_a = f.values) === null || _a === void 0 ? void 0 : _a.toArray();
-  });
-  /* 2 series 3 locomotives
-  0: Array(2)
-    0: Float64Array(10) [0, 49.169358, 0, 49.169358, 0, 49.169358, 0, 49.169358, 0, 49.169358]
-    1: Float64Array(10) [47.758088, 0, 47.758088, 0, 47.758088, 0, 47.758088, 0, 47.758088, 0]
-  1: Array(1)
-    0: Float64Array(5) [49.243383, 49.243383, 49.243383, 49.243383, 49.243383]
-  */
-
-  var latitudesData = data.series.map(function (s) {
-    return s.fields.filter(function (f) {
-      return f.name === 'latitude' || f.name === 'lat';
-    }).map(function (f) {
-      var _a;
-
-      return (_a = f.values) === null || _a === void 0 ? void 0 : _a.toArray();
-    });
-  });
-  var longitudesData = data.series.map(function (s) {
-    return s.fields.filter(function (f) {
-      return f.name === 'longitude' || f.name === 'lon';
-    }).map(function (f) {
-      var _a;
-
-      return (_a = f.values) === null || _a === void 0 ? void 0 : _a.toArray();
-    });
-  });
-  var labelsData = data.series.map(function (s) {
-    return s.fields.filter(function (f) {
-      return f.name === 'latitude' || f.name === 'lat';
-    }).map(function (f) {
-      return f.labels;
-    });
-  });
-  var intensitiesData = data.series.map(function (s) {
-    return s.fields.filter(function (f) {
-      return f.name === 'intensity';
-    }).map(function (f) {
-      var _a;
-
-      return (_a = f.values) === null || _a === void 0 ? void 0 : _a.toArray();
-    });
-  });
-  var markerPopupsData = data.series.map(function (s) {
-    return s.fields.filter(function (f) {
-      return f.name === 'popup' || f.name === 'text' || f.name === 'desc';
-    }).map(function (f) {
-      var _a;
-
-      return (_a = f.values) === null || _a === void 0 ? void 0 : _a.toArray();
-    });
-  });
-  var markerTooltipsData = data.series.map(function (s) {
-    return s.fields.filter(function (f) {
-      return f.name === 'tooltip';
-    }).map(function (f) {
-      var _a;
-
-      return (_a = f.values) === null || _a === void 0 ? void 0 : _a.toArray();
-    });
-  });
-  var latitudes = [];
-  var longitudes = [];
-  var timestamps = [];
+  var serieViewTypes = {};
+  var tracks = {};
   var labels = [];
   var intensities = [];
-  var markerPopups = [];
-  var markerTooltips = [];
-  labelsData === null || labelsData === void 0 ? void 0 : labelsData.forEach(function (serie, serieIdx) {
-    serie.forEach(function (ll, trackIdx) {
-      var _a;
+  data.series.forEach(function (s, sIdx) {
+    var _a;
 
-      var track = ll && ll['track'];
-      var trackIndex = 0;
+    var serieName = '';
 
-      if (track && tracksIndex[track] > 0) {
-        trackIndex = tracksIndex[track];
+    if (s.refId !== undefined) {
+      serieName = s.refId;
+      serieViewTypes[serieName] = [];
+    }
+
+    var trackss = s.fields.filter(function (f) {
+      return f.name === 'track';
+    })[0].values.toArray();
+    var latitudes = s.fields.filter(function (f) {
+      return f.name === 'latitude';
+    })[0].values.toArray();
+    var longitudes = s.fields.filter(function (f) {
+      return f.name === 'longitude';
+    })[0].values.toArray();
+    intensities.push(s.fields.filter(function (f) {
+      return f.name === 'intensity';
+    })[0].values.toArray());
+    var popups = s.fields.filter(function (f) {
+      return f.name === 'popup';
+    })[0].values.toArray();
+    var tooltips = s.fields.filter(function (f) {
+      return f.name === 'tooltip';
+    })[0].values.toArray();
+    (_a = s.fields.filter(function (f) {
+      return f.name === 'timestamp';
+    })[0].values) === null || _a === void 0 ? void 0 : _a.toArray().forEach(function (t, trackIdx) {
+      var track = trackss[trackIdx];
+      var latitude = latitudes[trackIdx];
+      var longitude = longitudes[trackIdx];
+      var popup = popups[trackIdx]; //.replaceAll('\\n', '\n');;
+
+      var tooltip = tooltips[trackIdx]; //.replaceAll('\\n', '\n');
+
+      var labels = {};
+
+      if (tracks[track] === undefined) {
+        tracks[track] = {};
+        tracks[track].positions = [];
       }
 
-      if (timestampsData !== undefined) {
-        (_a = timestampsData[serieIdx]) === null || _a === void 0 ? void 0 : _a.forEach(function (t, tIdx) {
-          var latitude = latitudesData && latitudesData[serieIdx][trackIdx][tIdx];
-          var longitude = longitudesData && longitudesData[serieIdx][trackIdx][tIdx];
-
-          if (latitude !== 0 && longitude !== 0) {
-            if (latitudes && latitudesData) {
-              if (latitudes[trackIndex] !== undefined) {
-                latitudes[trackIndex] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(latitudes[trackIndex], [latitudesData[serieIdx][trackIdx][tIdx]]);
-              } else {
-                latitudes[trackIndex] = [latitudesData[serieIdx][trackIdx][tIdx]];
-              }
-            }
-
-            if (longitudes && longitudesData) {
-              if (longitudes[trackIndex] !== undefined) {
-                longitudes[trackIndex] = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(longitudes[trackIndex], [longitudesData[serieIdx][trackIdx][tIdx]]);
-              } else {
-                longitudes[trackIndex] = [longitudesData[serieIdx][trackIdx][tIdx]];
-              }
-            }
-          }
-        });
-      } //if (timestamps && timestampsData) {
-      //  if (timestamps[trackIndex] !== undefined) {
-      //    timestamps[trackIndex].push(t);
-      //  } else {
-      //    timestamps[trackIndex] = [t];
-      //  }
-      //}
-
-
-      if (labels) {
-        labels[trackIndex] = ll;
-      } //if (intensities && intensitiesData) {
-      //  if (intensities[trackIndex] !== undefined) {
-      //    intensities[trackIndex] = [...intensities[trackIndex], intensitiesData[i][0][j]];
-      //  } else {
-      //    intensities[trackIndex] = [intensitiesData[i][0][j]];
-      //  }
-      //}
-      //if (markerPopups && markerPopupsData) {
-      //  if (markerPopups[trackIndex] !== undefined) {
-      //    markerPopups[trackIndex] = [...markerPopups[trackIndex], markerPopupsData[i][0][j]];
-      //  } else {
-      //    markerPopups[trackIndex] = [markerPopupsData[i][0][j]];
-      //  }
-      //}
-      //if (markerTooltips && markerTooltipsData) {
-      //  if (markerTooltips[trackIndex] !== undefined) {
-      //    markerTooltips[trackIndex] = [...markerTooltips[trackIndex], markerTooltipsData[i][0][j]];
-      //  } else {
-      //    markerTooltips[trackIndex] = [markerTooltipsData[i][0][j]];
-      //  }
-      //}
-
-    });
-  });
-  var liveness = latitudes.map(function (ls) {
-    return ls[ls.length - 1] !== null;
-  });
-  var iconHtml;
-
-  if (labels && labels.length) {
-    iconHtml = labels.map(function (l) {
-      var overrides = getMarkerHtmlOverrides();
-
-      if (l && l[options.marker.labelName] && overrides[l[options.marker.labelName]]) {
-        return overrides[l[options.marker.labelName]];
-      }
-
-      return undefined;
-    });
-  }
-
-  var positions = [];
-  latitudes === null || latitudes === void 0 ? void 0 : latitudes.forEach(function (lats, index1) {
-    positions[index1] = [];
-    lats.forEach(function (latitude, index2) {
-      var longitude = longitudes !== undefined && longitudes.length && longitudes[index1] !== undefined ? longitudes[index1][index2] : 0;
-      var timestamp = timestamps !== undefined && timestamps.length && timestamps[index1] !== undefined ? timestamps[index1][index2] : 0;
-      var trackLabels = labels && labels[index1] ? labels[index1] : undefined;
-      var popup = markerPopups !== undefined && markerPopups.length && markerPopups[index1] !== undefined ? markerPopups[index1][index2] : "LatLon: (" + latitude + ", " + longitude + ")\nTimestamp: " + timestamp + "\nLabels:\n" + (trackLabels ? JSON.stringify(trackLabels, null, 2) : '') + "\n";
-      var tooltip = markerTooltips !== undefined && markerTooltips.length && markerTooltips[index1] !== undefined ? markerTooltips[index1][index2] : undefined; // const icon = iconNames !== undefined ? iconNames[index1][index2] : undefined;
-
-      positions[index1].push({
+      tracks[track].name = serieName;
+      tracks[track].positions.push({
         latitude: latitude,
         longitude: longitude,
         popup: popup,
         tooltip: tooltip,
-        labels: trackLabels
+        labels: labels
       });
     });
   });
+  var i = 0;
+  var positions = [];
 
-  if (!positions || positions.length === 0) {
-    positions = [[{
-      latitude: 0,
-      longitude: 0
-    }]];
+  for (var track in tracks) {
+    positions[i] = tracks[track];
+    labels[i] = tracks[track].positions[0].labels;
+    i = i + 1;
   }
 
+  options.viewTypes.includes('marker') && options.marker.queries.forEach(function (q) {
+    return serieViewTypes[q].push('marker');
+  });
+  options.viewTypes.includes('ant') && options.ant.queries.forEach(function (q) {
+    return serieViewTypes[q].push('ant');
+  });
+  options.viewTypes.includes('heat') && options.heat.queries.forEach(function (q) {
+    return serieViewTypes[q].push('heat');
+  });
+  options.viewTypes.includes('hex') && options.hex.queries.forEach(function (q) {
+    return serieViewTypes[q].push('hex');
+  });
   var heatData = [];
   var antData = [];
   var hexData = {
@@ -29002,44 +28829,48 @@ var TrackMapPanel = function TrackMapPanel(_a) {
   };
   positions === null || positions === void 0 ? void 0 : positions.forEach(function (ps, i) {
     var antDatas = [];
+    var color = options.ant.color;
+    var overrideColor = options.ant.colorOverridesByQuery.filter(function (c) {
+      return c.label === ps.name;
+    });
+
+    if (overrideColor.length === 1) {
+      color = overrideColor[0].color;
+    }
+
     var antOptions = {
       delay: options.ant.delay,
-      dashArray: [10, 20],
+      dashArray: [20, 2],
       weight: options.ant.weight,
-      color: options.ant.color,
+      color: color,
       pulseColor: options.ant.pulseColor,
+      opacity: options.ant.opacity,
       paused: options.ant.paused,
-      reverse: options.ant.reverse
+      reverse: options.ant.reverse,
+      lineCap: 'butt'
     };
-
-    if (options.ant.pauseNonLiveTracks && !liveness[i]) {
-      antOptions.paused = true;
-    }
-
-    var currentLabels = labels[i];
-
-    if (options.ant.labelName && currentLabels && currentLabels[options.ant.labelName]) {
-      var override = getAntPathColorOverrides()[currentLabels[options.ant.labelName]];
-
-      if (override) {
-        antOptions.color = override;
-      }
-    }
-
     var heatDatas = [];
-    ps.forEach(function (p) {
+    ps.positions.forEach(function (p) {
       // These may be null for alignment purposes in the timeseries data
       if (p.latitude && p.longitude) {
-        heatDatas.push([p.latitude, p.longitude, intensities !== undefined ? intensities[i] : '']);
-        antDatas.push([p.latitude, p.longitude]);
-        hexData.features.push({
-          type: 'Feature',
-          id: i,
-          geometry: {
-            type: 'Point',
-            coordinates: [p.longitude, p.latitude]
-          }
-        });
+        if (options.viewTypes.includes('heat') && options.heat.queries.includes(ps.name)) {
+          heatDatas.push([p.latitude, p.longitude, intensities !== undefined ? intensities[i] : '']);
+        }
+
+        if (options.viewTypes.includes('ant') && options.ant.queries.includes(ps.name)) {
+          antDatas.push([p.latitude, p.longitude]);
+        }
+
+        if (options.viewTypes.includes('hex') && options.hex.queries.indexOf(ps.name) > -1) {
+          hexData.features.push({
+            type: 'Feature',
+            id: i,
+            geometry: {
+              type: 'Point',
+              coordinates: [p.longitude, p.latitude]
+            }
+          });
+        }
       }
     });
     heatData.push(heatDatas);
@@ -29049,66 +28880,55 @@ var TrackMapPanel = function TrackMapPanel(_a) {
     });
   });
 
-  var createMarkers = function createMarkers(positions, showOnlyLastMarker, showOnlyLiveTracks, alwaysShowTooltips) {
+  var createMarkers = function createMarkers(positions, colorOverridesByQuery) {
     var markers = [];
 
     if ((positions === null || positions === void 0 ? void 0 : positions.length) > 0) {
       positions.forEach(function (ps, i) {
-        ps = ps.filter(function (p) {
-          return p.latitude;
-        });
-        ps.forEach(function (p, j) {
-          var isLastPosition = j + 1 === (ps === null || ps === void 0 ? void 0 : ps.length);
-          var html = options.marker.defaultHtml;
+        if (options.viewTypes.includes('marker') && options.marker.queries.includes(ps.name)) {
+          var color_1 = options.marker.color;
+          var overrideColor = options.marker.colorOverridesByQuery.filter(function (c) {
+            return c.label === ps.name;
+          });
 
-          if (iconHtml && iconHtml.length) {
-            var maybeHtml = iconHtml[i];
-
-            if (maybeHtml !== undefined) {
-              html = maybeHtml;
-            }
+          if (overrideColor.length === 1) {
+            color_1 = overrideColor[0].color;
           }
 
-          var icon = createIcon(html, options.marker.size);
-          var shouldShow = true;
+          var size_1 = options.marker.size;
+          var overrideSize = options.marker.sizeOverridesByQuery.filter(function (c) {
+            return c.key === ps.name;
+          });
 
-          if (showOnlyLastMarker) {
-            if (!isLastPosition) {
-              shouldShow = false;
-            }
-
-            if (showOnlyLiveTracks && !liveness[i]) {
-              shouldShow = false;
-            }
+          if (overrideSize.length === 1) {
+            size_1 = overrideSize[0].value;
           }
 
-          if (shouldShow && p.latitude && p.longitude) {
-            markers.push(react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Marker"], {
-              key: i + '-' + j,
-              position: [p.latitude, p.longitude],
-              icon: icon,
-              title: p.popup
-            }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(StyledPopup, null, p.popup), p.tooltip && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Tooltip"], {
-              permanent: alwaysShowTooltips
-            }, p.tooltip)));
-          }
-        });
+          ps.positions.forEach(function (p, j) {
+            if (p.latitude && p.longitude) {
+              markers.push(react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["CircleMarker"], {
+                center: [p.latitude, p.longitude],
+                radius: size_1,
+                color: color_1
+              }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Popup"], null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+                style: {
+                  whiteSpace: 'pre-line'
+                }
+              }, p.popup)), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Tooltip"], null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+                style: {
+                  whiteSpace: 'pre-line'
+                }
+              }, p.popup))));
+            }
+          });
+        }
       });
     }
 
     return markers;
   };
 
-  var createIcon = function createIcon(html, size) {
-    return new leaflet__WEBPACK_IMPORTED_MODULE_4__["DivIcon"]({
-      html: html,
-      iconSize: [size, size],
-      iconAnchor: [size * 0.5, size],
-      popupAnchor: [0, -size]
-    });
-  };
-
-  var markers = createMarkers(positions, options.marker.showOnlyLastMarker, options.marker.showOnlyLiveTracks, options.marker.alwaysShowTooltips);
+  var markers = createMarkers(positions, options.marker.colorOverridesByQuery);
   var hexbinOptions = {
     colorScaleExtent: [1, undefined],
     radiusScaleExtent: [1, undefined],
@@ -29125,7 +28945,7 @@ var TrackMapPanel = function TrackMapPanel(_a) {
   };
 
   var updateQueryVariables = function updateQueryVariables(minLat, minLon, maxLat, maxLon) {
-    Object(_grafana_runtime__WEBPACK_IMPORTED_MODULE_8__["getLocationSrv"])().update({
+    Object(_grafana_runtime__WEBPACK_IMPORTED_MODULE_7__["getLocationSrv"])().update({
       query: {
         'var-minLat': minLat,
         'var-maxLat': maxLat,
@@ -29142,10 +28962,7 @@ var TrackMapPanel = function TrackMapPanel(_a) {
     var minLon = bounds.getSouthWest().lng;
     var maxLat = bounds.getNorthEast().lat;
     var maxLon = bounds.getNorthEast().lng;
-
-    if (options.map.useBoundsInQuery) {
-      updateQueryVariables(minLat, minLon, maxLat, maxLon);
-    }
+    updateQueryVariables(minLat, minLon, maxLat, maxLon);
   };
 
   var getBoundsFromPositions = function getBoundsFromPositions(positions) {
@@ -29176,37 +28993,64 @@ var TrackMapPanel = function TrackMapPanel(_a) {
     }
   };
 
+  var fitDataBounds = function fitDataBounds() {
+    if (mapRef.current !== null) {
+      var pp = positions.filter(function (p) {
+        var viewTypes = serieViewTypes[p.name];
+
+        if (viewTypes) {
+          if (options.viewTypes.includes('marker') && viewTypes.includes('marker') && options.marker.zoomToDataBounds) {
+            return true;
+          }
+
+          if (options.viewTypes.includes('ant') && viewTypes.includes('ant') && options.ant.zoomToDataBounds) {
+            return true;
+          }
+        }
+
+        return false;
+      }).map(function (p) {
+        return p.positions;
+      });
+
+      if (pp.length > 0) {
+        var bounds = getBoundsFromPositions(pp);
+        mapRef.current.leafletElement.fitBounds(bounds, {
+          animate: false
+        });
+        bounds = mapRef.current.leafletElement.getBounds();
+        updateMap(bounds);
+      }
+    }
+  };
+
+  fitDataBounds(); //useEffect(() => {
+  // eslint-disable-next-line
+  //}, []);
+  // FIT TO DATA
+  //if (mapRef.current !== null) {
+  //  console.log('PLOOOOOOOOOOOOOP');
+  //  //if (options.ant.zoomToDataBounds) {
+  //  let bounds = getBoundsFromPositions(positions.map((p) => p.positions));
+  //  mapRef.current.leafletElement.fitBounds(bounds, { animate: false });
+  //  //}
+  //  bounds = mapRef.current.leafletElement.getBounds();
+  //  updateMap(bounds);
+  //}
+  //
+
   var mapCenter = {
     latitude: options.map.centerLatitude,
     longitude: options.map.centerLongitude
   };
-
-  if (options.map.useCenterFromFirstPos && (positions === null || positions === void 0 ? void 0 : positions.length) && ((_b = positions[0]) === null || _b === void 0 ? void 0 : _b.length) && positions[0][0].latitude) {
-    mapCenter.latitude = positions[0][0].latitude;
-    mapCenter.longitude = positions[0][0].longitude;
-  }
-
-  if ((positions === null || positions === void 0 ? void 0 : positions.length) && ((_c = positions[0]) === null || _c === void 0 ? void 0 : _c.length) && positions[0][0]) {
-    if (options.map.useCenterFromFirstPos && positions[0][0].latitude) {
-      mapCenter.latitude = positions[0][0].latitude;
-      mapCenter.longitude = positions[0][0].longitude;
-    }
-
-    if (!options.map.useCenterFromFirstPos && options.map.useCenterFromLastPos && positions[positions.length - 1][positions[positions.length - 1].length - 1].latitude) {
-      var lastPosition = positions[positions.length - 1][positions[positions.length - 1].length - 1];
-      mapCenter.latitude = lastPosition.latitude;
-      mapCenter.longitude = lastPosition.longitude;
-    }
-  }
-
   var antPaths = null;
 
-  if (options.viewType === 'ant' || options.viewType === 'ant-marker') {
+  if (options.viewTypes.includes('ant')) {
     antPaths = antData.map(function (d, i) {
       var _a;
 
       if (d.data.length && d.data.length > 1) {
-        var popup = positions ? (_a = positions[i].find(function (p) {
+        var popup = positions ? (_a = positions[i].positions.find(function (p) {
           return p.latitude && p.longitude;
         })) === null || _a === void 0 ? void 0 : _a.popup : undefined;
         return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(AntPath, {
@@ -29223,6 +29067,7 @@ var TrackMapPanel = function TrackMapPanel(_a) {
   return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
     className: Object(emotion__WEBPACK_IMPORTED_MODULE_2__["cx"])(styles.wrapper, Object(emotion__WEBPACK_IMPORTED_MODULE_2__["css"])(templateObject_2 || (templateObject_2 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__makeTemplateObject"])(["\n          width: ", "px;\n          height: ", "px;\n        "], ["\n          width: ", "px;\n          height: ", "px;\n        "])), width, height))
   }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Map"], {
+    preferCanvas: true,
     ref: mapRef,
     center: [mapCenter.latitude, mapCenter.longitude],
     zoom: options.map.zoom,
@@ -29230,7 +29075,9 @@ var TrackMapPanel = function TrackMapPanel(_a) {
     onmoveend: function onmoveend(event) {
       onMapMoveEnd(event);
     }
-  }, antPaths, options.viewType === 'heat' && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(HeatmapLayer, {
+  }, options.viewTypes.includes('hex') && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(WrappedHexbinLayer, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, hexbinOptions, {
+    data: hexData
+  })), antPaths, options.viewTypes.includes('heat') && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(HeatmapLayer, {
     fitBoundsOnLoad: options.heat.fitBoundsOnLoad,
     fitBoundsOnUpdate: options.heat.fitBoundsOnUpdate,
     points: heatData,
@@ -29243,9 +29090,7 @@ var TrackMapPanel = function TrackMapPanel(_a) {
     intensityExtractor: function intensityExtractor(m) {
       return parseFloat(m[2]);
     }
-  }), options.viewType === 'hex' && react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(WrappedHexbinLayer, Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__assign"])({}, hexbinOptions, {
-    data: hexData
-  })), (options.viewType === 'marker' || options.viewType === 'ant-marker') && markers, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["TileLayer"], {
+  }), options.viewTypes.includes('marker') && markers, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["TileLayer"], {
     attribution: options.map.tileAttribution,
     url: options.map.tileUrl,
     accessToken: options.map.tileAccessToken !== '' ? options.map.tileAccessToken : undefined,
@@ -29254,7 +29099,7 @@ var TrackMapPanel = function TrackMapPanel(_a) {
     subdomains: options.map.tileSubDomains && options.map.tileSubDomains.length ? options.map.tileSubDomains : undefined
   })));
 };
-var getStyles = Object(_grafana_ui__WEBPACK_IMPORTED_MODULE_9__["stylesFactory"])(function () {
+var getStyles = Object(_grafana_ui__WEBPACK_IMPORTED_MODULE_8__["stylesFactory"])(function () {
   return {
     wrapper: Object(emotion__WEBPACK_IMPORTED_MODULE_2__["css"])(templateObject_3 || (templateObject_3 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__makeTemplateObject"])(["\n      position: relative;\n    "], ["\n      position: relative;\n    "])))
   };
@@ -29378,7 +29223,7 @@ function (_super) {
         item = _b.item;
     var showAdd = this.state.showAdd;
     var styles = getStyles(Object(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["getTheme"])());
-    var placeholder = ((_a = item.settings) === null || _a === void 0 ? void 0 : _a.placeholder) || 'Add label value';
+    var placeholder = ((_a = item.settings) === null || _a === void 0 ? void 0 : _a.placeholder) || 'Add query';
     var inputs = null;
 
     if (value) {
@@ -29512,301 +29357,9 @@ var plugin = new _grafana_data__WEBPACK_IMPORTED_MODULE_0__["PanelPlugin"](_Trac
 
 /***/ }),
 
-/***/ "./options.tsx":
-/*!*********************!*\
-  !*** ./options.tsx ***!
-  \*********************/
-/*! exports provided: optionsBuilder */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "optionsBuilder", function() { return optionsBuilder; });
-/* harmony import */ var _grafana_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @grafana/data */ "@grafana/data");
-/* harmony import */ var _grafana_data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_grafana_data__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _colorMapEditor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./colorMapEditor */ "./colorMapEditor.tsx");
-/* harmony import */ var _stringMapEditor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./stringMapEditor */ "./stringMapEditor.tsx");
-
-
-
-var optionsBuilder = function optionsBuilder(builder) {
-  return builder.addTextInput({
-    path: 'map.tileUrl',
-    name: 'URL template for tileserver',
-    defaultValue: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-  }).addTextInput({
-    path: 'map.tileAttribution',
-    name: 'Attribution HTML for tiles',
-    defaultValue: '&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-  }).addTextInput({
-    path: 'map.tileAccessToken',
-    name: 'Access token for tile server',
-    defaultValue: ''
-  }).addCustomEditor({
-    id: 'map.tileSubDomains',
-    path: 'map.tileSubDomains',
-    name: 'Tile server subdomains',
-    editor: _grafana_data__WEBPACK_IMPORTED_MODULE_0__["standardEditorsRegistry"].get('strings').editor,
-    defaultValue: ['a', 'b', 'c']
-  }).addBooleanSwitch({
-    path: 'map.useCenterFromFirstPos',
-    name: 'Map center to first position',
-    defaultValue: false,
-    showIf: function showIf(config) {
-      return !config.map.useCenterFromLastPos && !config.map.zoomToDataBounds;
-    }
-  }).addBooleanSwitch({
-    path: 'map.useCenterFromLastPos',
-    name: 'Map center to last position',
-    defaultValue: false,
-    showIf: function showIf(config) {
-      return !config.map.useCenterFromFirstPos && !config.map.zoomToDataBounds;
-    }
-  }).addBooleanSwitch({
-    path: 'map.zoomToDataBounds',
-    name: 'Zoom map to fit data bounds',
-    defaultValue: false,
-    showIf: function showIf(config) {
-      return !config.map.useCenterFromFirstPos && !config.map.useCenterFromLastPos && !config.map.useBoundsInQuery;
-    }
-  }).addNumberInput({
-    path: 'map.centerLatitude',
-    name: 'Map center latitude',
-    defaultValue: 56.17203,
-    showIf: function showIf(config) {
-      return !config.map.useCenterFromFirstPos && !config.map.useCenterFromLastPos && !config.map.zoomToDataBounds;
-    }
-  }).addNumberInput({
-    path: 'map.centerLongitude',
-    name: 'Map center longitude',
-    defaultValue: 10.1865203,
-    showIf: function showIf(config) {
-      return !config.map.useCenterFromFirstPos && !config.map.useCenterFromLastPos && !config.map.zoomToDataBounds;
-    }
-  }).addNumberInput({
-    path: 'map.zoom',
-    name: 'Map Zoom',
-    defaultValue: 10,
-    showIf: function showIf(config) {
-      return !config.map.zoomToDataBounds;
-    }
-  }).addBooleanSwitch({
-    path: 'map.useBoundsInQuery',
-    name: 'Use map bounds in query',
-    defaultValue: false,
-    showIf: function showIf(config) {
-      return !config.map.zoomToDataBounds;
-    }
-  }).addSelect({
-    path: 'viewType',
-    defaultValue: 'marker',
-    name: 'Visualisation type',
-    settings: {
-      options: [{
-        value: 'marker',
-        label: 'Markers'
-      }, {
-        value: 'ant',
-        label: 'Ant Path'
-      }, {
-        value: 'ant-marker',
-        label: 'Ant Path With Markers'
-      }, {
-        value: 'hex',
-        label: 'Hexbin'
-      }, {
-        value: 'heat',
-        label: 'Heatmap'
-      }]
-    }
-  }) //ant
-  .addNumberInput({
-    category: ['Ant Path'],
-    path: 'ant.delay',
-    name: 'Delay',
-    defaultValue: 400,
-    showIf: function showIf(config) {
-      return config.viewType === 'ant' || config.viewType === 'ant-marker';
-    }
-  }).addNumberInput({
-    category: ['Ant Path'],
-    path: 'ant.weight',
-    name: 'Weight',
-    defaultValue: 5,
-    showIf: function showIf(config) {
-      return config.viewType === 'ant' || config.viewType === 'ant-marker';
-    }
-  }).addColorPicker({
-    category: ['Ant Path'],
-    path: 'ant.color',
-    name: 'Color',
-    defaultValue: 'rgba(0, 100, 255, 1)',
-    showIf: function showIf(config) {
-      return config.viewType === 'ant' || config.viewType === 'ant-marker';
-    }
-  }).addColorPicker({
-    category: ['Ant Path'],
-    path: 'ant.pulseColor',
-    name: 'Pulse color',
-    defaultValue: 'rgba(0, 100, 255, 0.2)',
-    showIf: function showIf(config) {
-      return config.viewType === 'ant' || config.viewType === 'ant-marker';
-    }
-  }).addBooleanSwitch({
-    category: ['Ant Path'],
-    path: 'ant.paused',
-    name: 'Paused',
-    defaultValue: false,
-    showIf: function showIf(config) {
-      return config.viewType === 'ant' || config.viewType === 'ant-marker';
-    }
-  }).addBooleanSwitch({
-    category: ['Ant Path'],
-    path: 'ant.pauseNonLiveTracks',
-    name: 'Pause non-live tracks',
-    defaultValue: true,
-    showIf: function showIf(config) {
-      return config.viewType === 'ant' || config.viewType === 'ant-marker';
-    }
-  }).addBooleanSwitch({
-    category: ['Ant Path'],
-    path: 'ant.reverse',
-    name: 'Reverse',
-    defaultValue: false,
-    showIf: function showIf(config) {
-      return config.viewType === 'ant' || config.viewType === 'ant-marker';
-    }
-  }).addTextInput({
-    category: ['Ant Path'],
-    path: 'ant.labelName',
-    name: 'Override label',
-    description: 'If a timeseries has a label with this key, it will be used to lookup an alternative color based on the label value',
-    defaultValue: ''
-  }).addCustomEditor({
-    id: 'ant.colorOverridesByLabel',
-    category: ['Ant Path'],
-    path: 'ant.colorOverridesByLabel',
-    name: 'Color overrides by label',
-    editor: _colorMapEditor__WEBPACK_IMPORTED_MODULE_1__["default"],
-    defaultValue: []
-  }) //heat
-  .addBooleanSwitch({
-    category: ['Heat Map'],
-    path: 'heat.fitBoundsOnLoad',
-    name: 'Fit bounds on load',
-    defaultValue: false,
-    showIf: function showIf(config) {
-      return config.viewType === 'heat';
-    }
-  }).addBooleanSwitch({
-    category: ['Heat Map'],
-    path: 'heat.fitBoundsOnUpdate',
-    name: 'Fit bounds on update',
-    defaultValue: false,
-    showIf: function showIf(config) {
-      return config.viewType === 'heat';
-    }
-  }) //marker
-  .addNumberInput({
-    category: ['Markers'],
-    path: 'marker.size',
-    name: 'Size',
-    defaultValue: 25,
-    showIf: function showIf(config) {
-      return config.viewType === 'marker' || config.viewType === 'ant-marker';
-    }
-  }).addTextInput({
-    category: ['Markers'],
-    path: 'marker.defaultHtml',
-    name: 'Default marker HTML',
-    description: 'If the timeseries does not have a label with the key from the "Override label", the default marker will be used',
-    defaultValue: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"25px\" height=\"25px\" viewBox=\"0 0 25 25\" version=\"1.1\">\n<g id=\"surface1\">\n<path style=\" stroke:none;fill-rule:nonzero;fill:rgb(100%,50%,50%);fill-opacity:0.8;\" d=\"M 12.515625 0 L 12.480469 0 C 8.164062 0 4.652344 3.511719 4.652344 7.828125 C 4.652344 10.65625 5.941406 14.386719 8.480469 18.921875 C 10.363281 22.285156 12.273438 24.859375 12.292969 24.882812 C 12.347656 24.957031 12.429688 24.996094 12.519531 24.996094 C 12.523438 24.996094 12.523438 24.996094 12.527344 24.996094 C 12.617188 24.996094 12.703125 24.949219 12.753906 24.871094 C 12.773438 24.84375 14.667969 21.980469 16.539062 18.476562 C 19.066406 13.75 20.347656 10.164062 20.347656 7.828125 C 20.347656 3.511719 16.832031 0 12.515625 0 Z M 16.128906 8.019531 C 16.128906 10.019531 14.5 11.648438 12.5 11.648438 C 10.496094 11.648438 8.867188 10.019531 8.867188 8.019531 C 8.867188 6.015625 10.496094 4.386719 12.5 4.386719 C 14.5 4.386719 16.128906 6.015625 16.128906 8.019531 Z M 16.128906 8.019531 \"/>\n</g>\n</svg>"
-  }).addTextInput({
-    category: ['Markers'],
-    path: 'marker.labelName',
-    name: 'Override label',
-    description: 'If a timeseries has a label with this key, it will be used to lookup an alternative HTML marker based on the label value',
-    defaultValue: ''
-  }).addCustomEditor({
-    category: ['Markers'],
-    id: 'marker.markerHtmlByLabel',
-    path: 'marker.markerHtmlByLabel',
-    name: 'Marker HTML overrides by label',
-    editor: _stringMapEditor__WEBPACK_IMPORTED_MODULE_2__["default"],
-    defaultValue: []
-  }).addBooleanSwitch({
-    category: ['Markers'],
-    path: 'marker.showOnlyLastMarker',
-    name: 'Show only last marker',
-    defaultValue: false,
-    showIf: function showIf(config) {
-      return config.viewType === 'marker' || config.viewType === 'ant-marker';
-    }
-  }).addBooleanSwitch({
-    category: ['Markers'],
-    path: 'marker.showOnlyLiveTracks',
-    name: 'Show last marker only for tracks still present at the end of the time window (i.e. still live)',
-    defaultValue: true,
-    showIf: function showIf(config) {
-      return config.viewType === 'marker' || config.viewType === 'ant-marker';
-    }
-  }).addBooleanSwitch({
-    category: ['Markers'],
-    path: 'marker.alwaysShowTooltips',
-    name: 'Always show tooltips',
-    defaultValue: false,
-    showIf: function showIf(config) {
-      return config.viewType === 'marker' || config.viewType === 'ant-marker';
-    }
-  }) //hex
-  .addNumberInput({
-    category: ['HexBin'],
-    path: 'hex.opacity',
-    name: 'Opacity',
-    defaultValue: 0.6,
-    showIf: function showIf(config) {
-      return config.viewType === 'hex';
-    }
-  }).addTextInput({
-    category: ['HexBin'],
-    path: 'hex.colorRangeFrom',
-    name: 'Color range from (hex)',
-    defaultValue: '#f7fbff',
-    showIf: function showIf(config) {
-      return config.viewType === 'hex';
-    }
-  }).addTextInput({
-    category: ['HexBin'],
-    path: 'hex.colorRangeTo',
-    name: 'Color range to (hex)',
-    defaultValue: '#ff0000',
-    showIf: function showIf(config) {
-      return config.viewType === 'hex';
-    }
-  }).addNumberInput({
-    category: ['HexBin'],
-    path: 'hex.radiusRangeFrom',
-    name: 'Radius range from',
-    defaultValue: 5,
-    showIf: function showIf(config) {
-      return config.viewType === 'hex';
-    }
-  }).addNumberInput({
-    category: ['HexBin'],
-    path: 'hex.radiusRangeTo',
-    name: 'Radius range to',
-    defaultValue: 12,
-    showIf: function showIf(config) {
-      return config.viewType === 'hex';
-    }
-  });
-};
-
-/***/ }),
-
-/***/ "./stringMapEditor.tsx":
+/***/ "./numberMapEditor.tsx":
 /*!*****************************!*\
-  !*** ./stringMapEditor.tsx ***!
+  !*** ./numberMapEditor.tsx ***!
   \*****************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -29824,12 +29377,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var StringMapEditor =
+var NumberMapEditor =
 /** @class */
 function (_super) {
-  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(StringMapEditor, _super);
+  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(NumberMapEditor, _super);
 
-  function StringMapEditor() {
+  function NumberMapEditor() {
     var _this = _super !== null && _super.apply(this, arguments) || this;
 
     _this.state = {
@@ -29907,7 +29460,7 @@ function (_super) {
     return _this;
   }
 
-  StringMapEditor.prototype.render = function () {
+  NumberMapEditor.prototype.render = function () {
     var _this = this;
 
     var _a;
@@ -29917,7 +29470,7 @@ function (_super) {
         item = _b.item;
     var showAdd = this.state.showAdd;
     var styles = Object(_colorMapEditor__WEBPACK_IMPORTED_MODULE_3__["getStyles"])(Object(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["getTheme"])());
-    var placeholder = ((_a = item.settings) === null || _a === void 0 ? void 0 : _a.placeholder) || 'Add label value';
+    var placeholder = ((_a = item.settings) === null || _a === void 0 ? void 0 : _a.placeholder) || 'Add query';
     var inputs = null;
 
     if (value) {
@@ -29930,12 +29483,12 @@ function (_super) {
           css: {},
           className: styles.textInput,
           key: index + "/" + k,
-          defaultValue: k.value || '<div></div>',
+          defaultValue: k.value || 2,
           onBlur: function onBlur(e) {
-            _this.onValueChange(k.key, e.currentTarget.value.trim(), index, e);
+            _this.onValueChange(k.key, e.currentTarget.valueAsNumber, index, e);
           },
           onKeyDown: function onKeyDown(e) {
-            _this.onValueChange(k.key, e.currentTarget.value.trim(), index, e);
+            _this.onValueChange(k.key, e.currentTarget.valueAsNumber, index, e);
           }
         }));
         return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
@@ -29968,10 +29521,10 @@ function (_super) {
       placeholder: placeholder,
       defaultValue: '',
       onBlur: function onBlur(e) {
-        return _this.onValueChange(e.currentTarget.value.trim(), '<div></div>', -1, e);
+        return _this.onValueChange(e.currentTarget.value.trim(), 0, -1, e);
       },
       onKeyDown: function onKeyDown(e) {
-        return _this.onValueChange(e.currentTarget.value.trim(), '<div></div>', -1, e);
+        return _this.onValueChange(e.currentTarget.value.trim(), 0, -1, e);
       },
       suffix: react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Icon"], {
         name: "plus-circle"
@@ -29988,10 +29541,299 @@ function (_super) {
     }, placeholder));
   };
 
-  return StringMapEditor;
+  return NumberMapEditor;
 }(react__WEBPACK_IMPORTED_MODULE_1___default.a.PureComponent);
 
-/* harmony default export */ __webpack_exports__["default"] = (StringMapEditor);
+/* harmony default export */ __webpack_exports__["default"] = (NumberMapEditor);
+
+/***/ }),
+
+/***/ "./options.tsx":
+/*!*********************!*\
+  !*** ./options.tsx ***!
+  \*********************/
+/*! exports provided: optionsBuilder */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "optionsBuilder", function() { return optionsBuilder; });
+/* harmony import */ var _colorMapEditor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./colorMapEditor */ "./colorMapEditor.tsx");
+/* harmony import */ var _numberMapEditor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./numberMapEditor */ "./numberMapEditor.tsx");
+
+
+var optionsBuilder = function optionsBuilder(builder) {
+  return builder.addTextInput({
+    category: ['Map'],
+    path: 'map.tileUrl',
+    name: 'URL template for tileserver',
+    defaultValue: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+  }).addTextInput({
+    category: ['Map'],
+    path: 'map.tileAttribution',
+    name: 'Attribution HTML for tiles',
+    defaultValue: '&copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+  }).addTextInput({
+    category: ['Map'],
+    path: 'map.tileAccessToken',
+    name: 'Access token for tile server',
+    defaultValue: ''
+  }).addStringArray({
+    category: ['Map'],
+    path: 'map.tileSubDomains',
+    name: 'Tile server subdomains',
+    defaultValue: ['a', 'b', 'c']
+  }).addNumberInput({
+    category: ['Map'],
+    path: 'map.centerLatitude',
+    name: 'Map center latitude',
+    defaultValue: 56.17203
+  }).addNumberInput({
+    category: ['Map'],
+    path: 'map.centerLongitude',
+    name: 'Map center longitude',
+    defaultValue: 10.1865203
+  }).addNumberInput({
+    category: ['Map'],
+    path: 'map.zoom',
+    name: 'Map Zoom',
+    defaultValue: 10
+  }).addMultiSelect({
+    path: 'viewTypes',
+    defaultValue: 'marker',
+    name: 'Visualisation types',
+    settings: {
+      options: [{
+        value: 'marker',
+        label: 'Markers'
+      }, {
+        value: 'ant',
+        label: 'Ant Path'
+      }, {
+        value: 'hex',
+        label: 'Hexbin'
+      }, {
+        value: 'heat',
+        label: 'Heatmap'
+      }]
+    }
+  }) //ant
+  .addStringArray({
+    category: ['Ant Path'],
+    path: 'ant.queries',
+    name: 'Queries',
+    defaultValue: [],
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('ant');
+    }
+  }).addNumberInput({
+    category: ['Ant Path'],
+    path: 'ant.delay',
+    name: 'Delay',
+    defaultValue: 400,
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('ant');
+    }
+  }).addNumberInput({
+    category: ['Ant Path'],
+    path: 'ant.weight',
+    name: 'Weight',
+    defaultValue: 5,
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('ant');
+    }
+  }).addColorPicker({
+    category: ['Ant Path'],
+    path: 'ant.color',
+    name: 'Color',
+    defaultValue: 'rgba(0, 100, 255, 1)',
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('ant');
+    }
+  }).addColorPicker({
+    category: ['Ant Path'],
+    path: 'ant.pulseColor',
+    name: 'Pulse color',
+    defaultValue: 'rgba(0, 100, 255, 0.2)',
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('ant');
+    }
+  }).addSliderInput({
+    category: ['Ant Path'],
+    path: 'ant.opacity',
+    name: 'Opacity',
+    settings: {
+      max: 1,
+      min: 0,
+      step: 0.1
+    },
+    defaultValue: 0.8,
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('ant');
+    }
+  }).addBooleanSwitch({
+    category: ['Ant Path'],
+    path: 'ant.paused',
+    name: 'Paused',
+    defaultValue: false,
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('ant');
+    }
+  }).addBooleanSwitch({
+    category: ['Ant Path'],
+    path: 'ant.reverse',
+    name: 'Reverse',
+    defaultValue: false,
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('ant');
+    }
+  }).addCustomEditor({
+    id: 'ant.colorOverridesByQuery',
+    category: ['Ant Path'],
+    path: 'ant.colorOverridesByQuery',
+    name: 'Color by query',
+    editor: _colorMapEditor__WEBPACK_IMPORTED_MODULE_0__["default"],
+    defaultValue: [],
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('ant');
+    }
+  }).addBooleanSwitch({
+    category: ['Ant Path'],
+    path: 'ant.zoomToDataBounds',
+    name: 'Zoom map to fit data bounds',
+    defaultValue: true,
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('ant');
+    }
+  }) //heat
+  .addStringArray({
+    category: ['Heat Map'],
+    path: 'heat.queries',
+    name: 'Queries',
+    defaultValue: [],
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('heat');
+    }
+  }).addBooleanSwitch({
+    category: ['Heat Map'],
+    path: 'heat.fitBoundsOnLoad',
+    name: 'Fit bounds on load',
+    defaultValue: false,
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('heat');
+    }
+  }).addBooleanSwitch({
+    category: ['Heat Map'],
+    path: 'heat.fitBoundsOnUpdate',
+    name: 'Fit bounds on update',
+    defaultValue: false,
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('heat');
+    }
+  }) //marker
+  .addStringArray({
+    category: ['Markers'],
+    path: 'marker.queries',
+    name: 'Queries',
+    defaultValue: [],
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('marker');
+    }
+  }).addColorPicker({
+    category: ['Markers'],
+    path: 'marker.color',
+    name: 'Color',
+    defaultValue: 'rgba(0, 100, 255, 0.2)',
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('marker');
+    }
+  }).addNumberInput({
+    category: ['Markers'],
+    path: 'marker.size',
+    name: 'Size',
+    defaultValue: 25,
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('marker');
+    }
+  }).addCustomEditor({
+    id: 'marker.colorOverridesByQuery',
+    category: ['Markers'],
+    path: 'marker.colorOverridesByQuery',
+    name: 'Color by query',
+    editor: _colorMapEditor__WEBPACK_IMPORTED_MODULE_0__["default"],
+    defaultValue: [],
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('marker');
+    }
+  }).addCustomEditor({
+    id: 'marker.sizeOverridesByQuery',
+    category: ['Markers'],
+    path: 'marker.sizeOverridesByQuery',
+    name: 'Size by query',
+    editor: _numberMapEditor__WEBPACK_IMPORTED_MODULE_1__["default"],
+    defaultValue: [],
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('marker');
+    }
+  }).addBooleanSwitch({
+    category: ['Markers'],
+    path: 'marker.zoomToDataBounds',
+    name: 'Zoom map to fit data bounds',
+    defaultValue: true,
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('marker');
+    }
+  }) //hex
+  .addStringArray({
+    category: ['HexBin'],
+    path: 'hex.queries',
+    name: 'Queries',
+    defaultValue: [],
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('hex');
+    }
+  }).addNumberInput({
+    category: ['HexBin'],
+    path: 'hex.opacity',
+    name: 'Opacity',
+    defaultValue: 0.6,
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('hex');
+    }
+  }).addTextInput({
+    category: ['HexBin'],
+    path: 'hex.colorRangeFrom',
+    name: 'Color range from (hex)',
+    defaultValue: '#f7fbff',
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('hex');
+    }
+  }).addTextInput({
+    category: ['HexBin'],
+    path: 'hex.colorRangeTo',
+    name: 'Color range to (hex)',
+    defaultValue: '#ff0000',
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('hex');
+    }
+  }).addNumberInput({
+    category: ['HexBin'],
+    path: 'hex.radiusRangeFrom',
+    name: 'Radius range from',
+    defaultValue: 5,
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('hex');
+    }
+  }).addNumberInput({
+    category: ['HexBin'],
+    path: 'hex.radiusRangeTo',
+    name: 'Radius range to',
+    defaultValue: 12,
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('hex');
+    }
+  });
+};
 
 /***/ }),
 

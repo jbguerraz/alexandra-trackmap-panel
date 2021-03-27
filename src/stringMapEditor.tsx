@@ -3,7 +3,7 @@ import React from 'react';
 import { Button, getTheme, Icon, Input } from '@grafana/ui';
 import { getStyles } from './colorMapEditor';
 
-export interface KeyValue {
+export interface KeyValueString {
   key: string;
   value: string;
 }
@@ -12,7 +12,7 @@ interface StringMapEditorState {
   showAdd: boolean;
 }
 
-type StringMapEditorProps = FieldConfigEditorProps<KeyValue[], StringFieldConfigSettings>;
+type StringMapEditorProps = FieldConfigEditorProps<KeyValueString[], StringFieldConfigSettings>;
 
 export default class StringMapEditor extends React.PureComponent<StringMapEditorProps, StringMapEditorState> {
   state: StringMapEditorState = {

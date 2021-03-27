@@ -69,7 +69,7 @@ export default class ColorMapEditor extends React.PureComponent<ColorMapEditorPr
     let { value, item } = this.props;
     const { showAdd } = this.state;
     const styles = getStyles(getTheme());
-    const placeholder = item.settings?.placeholder || 'Add label value';
+    const placeholder = item.settings?.placeholder || 'Add query';
     let inputs = null;
     if (value) {
       inputs = value.map((k, index) => {

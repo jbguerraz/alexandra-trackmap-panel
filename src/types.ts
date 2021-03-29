@@ -1,7 +1,6 @@
 import { Labels } from '@grafana/data';
 import { LabelColor } from './colorMapEditor';
 import { KeyValueString } from './stringMapEditor';
-import { KeyValueNumber } from './numberMapEditor';
 
 type ViewType = 'ant' | 'hex' | 'heat' | 'marker';
 
@@ -54,7 +53,6 @@ interface MarkerOptions {
   color: string;
   size: number;
   colorOverridesByQuery: LabelColor[];
-  sizeOverridesByQuery: KeyValueNumber[];
   zoomToDataBounds: boolean;
 }
 

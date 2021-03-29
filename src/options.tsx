@@ -3,7 +3,6 @@ import { TrackMapOptions } from './types';
 
 import React from 'react';
 import ColorMapEditor from './colorMapEditor';
-import NumberMapEditor from './numberMapEditor';
 
 export const optionsBuilder = (builder: PanelOptionsEditorBuilder<TrackMapOptions>) => {
   return (
@@ -203,15 +202,6 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<TrackMapOption
         path: 'marker.colorOverridesByQuery',
         name: 'Color by query',
         editor: ColorMapEditor as any,
-        defaultValue: [],
-        showIf: (config: TrackMapOptions) => config.viewTypes.includes('marker'),
-      })
-      .addCustomEditor({
-        id: 'marker.sizeOverridesByQuery',
-        category: ['Markers'],
-        path: 'marker.sizeOverridesByQuery',
-        name: 'Size by query',
-        editor: NumberMapEditor as any,
         defaultValue: [],
         showIf: (config: TrackMapOptions) => config.viewTypes.includes('marker'),
       })

@@ -162,10 +162,6 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
             color = overrideColor[0].color;
           }
           let size = options.marker.size;
-          let overrideSize = options.marker.sizeOverridesByQuery.filter((c) => c.key === ps.name);
-          if (overrideSize.length === 1) {
-            size = overrideSize[0].value;
-          }
           ps.positions.forEach((p, j) => {
             if (p.latitude && p.longitude) {
               markers.push(

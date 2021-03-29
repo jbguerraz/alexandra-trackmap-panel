@@ -35,14 +35,14 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
   const WrappedHexbinLayer: any = withLeaflet(HexbinLayer);
 
   useEffect(() => {
-    fitDataBounds()
-  }, [])
+    fitDataBounds();
+  });
 
   interface SeriePositions {
     name: string;
     positions: Position[];
   }
-  let serieViewTypes: { [serie: string]: string[] } = {}
+  let serieViewTypes: { [serie: string]: string[] } = {};
   let tracks: { [track: string]: SeriePositions } = {};
   let labels: Array<Labels | undefined> = [] as Labels[];
   let intensities: number[][] = [] as number[][];
@@ -90,10 +90,10 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
     labels[i] = tracks[track].positions[0].labels;
     i = i + 1;
   }
-  options.viewTypes.includes('marker') && options.marker.queries.forEach(q => serieViewTypes[q].push('marker'))
-  options.viewTypes.includes('ant') && options.ant.queries.forEach(q => serieViewTypes[q].push('ant'))
-  options.viewTypes.includes('heat') && options.heat.queries.forEach(q => serieViewTypes[q].push('heat'))
-  options.viewTypes.includes('hex') && options.hex.queries.forEach(q => serieViewTypes[q].push('hex'))
+  options.viewTypes.includes('marker') && options.marker.queries.forEach((q) => serieViewTypes[q].push('marker'));
+  options.viewTypes.includes('ant') && options.ant.queries.forEach((q) => serieViewTypes[q].push('ant'));
+  options.viewTypes.includes('heat') && options.heat.queries.forEach((q) => serieViewTypes[q].push('heat'));
+  options.viewTypes.includes('hex') && options.hex.queries.forEach((q) => serieViewTypes[q].push('hex'));
 
   const heatData: any[][] = [];
   const antData: AntData[] = [];
@@ -243,29 +243,35 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
 
   const fitDataBounds = () => {
     if (mapRef.current !== null) {
-      let pp = positions.filter(p => {
-      let viewTypes = serieViewTypes[p.name]
-      if (viewTypes) {
-        if (options.viewTypes.includes('marker') && viewTypes.includes('marker') && options.marker.zoomToDataBounds) {
-           return true
+      let pp = positions
+        .filter((p) => {
+          let viewTypes = serieViewTypes[p.name];
+          if (viewTypes) {
+            if (
+              options.viewTypes.includes('marker') &&
+              viewTypes.includes('marker') &&
+              options.marker.zoomToDataBounds
+            ) {
+              return true;
             }
             if (options.viewTypes.includes('ant') && viewTypes.includes('ant') && options.ant.zoomToDataBounds) {
-              return true
+              return true;
             }
           }
-          return false
-        }).map(p => p.positions);
-        if (pp.length > 0) {
-          let bounds = getBoundsFromPositions(pp)
-          mapRef.current.leafletElement.fitBounds(bounds, { animate: false });
-          bounds = mapRef.current.leafletElement.getBounds();
-          updateMap(bounds);
-        }
+          return false;
+        })
+        .map((p) => p.positions);
+      if (pp.length > 0) {
+        let bounds = getBoundsFromPositions(pp);
+        mapRef.current.leafletElement.fitBounds(bounds, { animate: false });
+        bounds = mapRef.current.leafletElement.getBounds();
+        updateMap(bounds);
+      }
     }
-  }
-  fitDataBounds()
+  };
+  fitDataBounds();
   //useEffect(() => {
-    // eslint-disable-next-line
+  // eslint-disable-next-line
   //}, []);
 
   // FIT TO DATA

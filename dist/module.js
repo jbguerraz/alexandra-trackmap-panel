@@ -28740,7 +28740,7 @@ var TrackMapPanel = function TrackMapPanel(_a) {
   var WrappedHexbinLayer = Object(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["withLeaflet"])(HexbinLayer);
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(function () {
     fitDataBounds();
-  }, []);
+  });
   var serieViewTypes = {};
   var tracks = {};
   var labels = [];

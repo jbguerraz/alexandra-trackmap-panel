@@ -21,6 +21,7 @@ interface Props extends PanelProps<TrackMapOptions> {}
 const StyledPopup = styled(Popup)`
   .leaflet-popup-content-wrapper {
     white-space: pre-wrap;
+    color: black !important;
   }
 
   .leaflet-popup-tip-container {

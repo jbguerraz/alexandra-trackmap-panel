@@ -113,7 +113,7 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
 
     const antOptions = {
       delay: options.ant.delay,
-      dashArray: [20, 2],
+      dashArray: [20, 5],
       weight: options.ant.weight,
       color: color,
       pulseColor: options.ant.pulseColor,

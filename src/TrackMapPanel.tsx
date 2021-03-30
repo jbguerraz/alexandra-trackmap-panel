@@ -265,15 +265,23 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
     antPaths = antData.map((d, i) => {
       if (d.data.length && d.data.length > 0) {
         const popup = positions ? positions[i].positions.find((p) => p.latitude && p.longitude)?.popup : undefined;
-        if (d.data.length === 1) {
+        let onePosition = true
+        let ref = positions[i].positions[0]
+        for (let position of positions[i].positions) {
+          if (position.latitude !== ref.latitude || position.longitude !== ref.longitude) {
+            onePosition = false
+            break
+          }
+        }
+        if (onePosition === true) {
           return markers.push(
             <CircleMarker
-              center={[positions[i].positions[0].latitude, positions[i].positions[0].longitude]}
+              center={[ref.latitude, ref.longitude]}
               radius={options.ant.onePointSize}
               color={options.ant.onePointColor}
             >
-              <Popup>{positions[i].positions[0].popup}</Popup>
-              <Tooltip>{positions[i].positions[0].popup}</Tooltip>
+              <Popup>{ref.popup}</Popup>
+              <Tooltip>{ref.popup}</Tooltip>
             </CircleMarker>
           );
         } else {

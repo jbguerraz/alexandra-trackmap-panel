@@ -1,4 +1,4 @@
-define(["@grafana/data","@grafana/runtime","@grafana/ui","emotion","react","react-dom"], function(__WEBPACK_EXTERNAL_MODULE__grafana_data__, __WEBPACK_EXTERNAL_MODULE__grafana_runtime__, __WEBPACK_EXTERNAL_MODULE__grafana_ui__, __WEBPACK_EXTERNAL_MODULE_emotion__, __WEBPACK_EXTERNAL_MODULE_react__, __WEBPACK_EXTERNAL_MODULE_react_dom__) { return /******/ (function(modules) { // webpackBootstrap
+define(["@grafana/data","@grafana/ui","emotion","react","react-dom"], function(__WEBPACK_EXTERNAL_MODULE__grafana_data__, __WEBPACK_EXTERNAL_MODULE__grafana_ui__, __WEBPACK_EXTERNAL_MODULE_emotion__, __WEBPACK_EXTERNAL_MODULE_react__, __WEBPACK_EXTERNAL_MODULE_react_dom__) { return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -28709,11 +28709,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var leaflet_dist_leaflet_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! leaflet/dist/leaflet.css */ "../node_modules/leaflet/dist/leaflet.css");
 /* harmony import */ var leaflet_dist_leaflet_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(leaflet_dist_leaflet_css__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! styled-components */ "../node_modules/styled-components/dist/styled-components.browser.esm.js");
-/* harmony import */ var _grafana_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @grafana/runtime */ "@grafana/runtime");
-/* harmony import */ var _grafana_runtime__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_grafana_runtime__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
-/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_8__);
-
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_7__);
 
 
 
@@ -28729,7 +28726,7 @@ var HeatmapLayer = __webpack_require__(/*! react-leaflet-heatmap-layer */ "../no
 
 var HexbinLayer = __webpack_require__(/*! react-leaflet-d3 */ "../node_modules/react-leaflet-d3/dist/react-leaflet-d3.min.js").HexbinLayer;
 
-var StyledPopup = Object(styled_components__WEBPACK_IMPORTED_MODULE_6__["default"])(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Popup"])(templateObject_1 || (templateObject_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__makeTemplateObject"])(["\n  .leaflet-popup-content-wrapper {\n    white-space: pre-wrap;\n  }\n\n  .leaflet-popup-tip-container {\n    visibility: hidden;\n  }\n"], ["\n  .leaflet-popup-content-wrapper {\n    white-space: pre-wrap;\n  }\n\n  .leaflet-popup-tip-container {\n    visibility: hidden;\n  }\n"])));
+var StyledPopup = Object(styled_components__WEBPACK_IMPORTED_MODULE_6__["default"])(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Popup"])(templateObject_1 || (templateObject_1 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__makeTemplateObject"])(["\n  .leaflet-popup-content-wrapper {\n    white-space: pre-wrap;\n    color: black !important;\n  }\n\n  .leaflet-popup-tip-container {\n    visibility: hidden;\n  }\n"], ["\n  .leaflet-popup-content-wrapper {\n    white-space: pre-wrap;\n    color: black !important;\n  }\n\n  .leaflet-popup-tip-container {\n    visibility: hidden;\n  }\n"])));
 var TrackMapPanel = function TrackMapPanel(_a) {
   var options = _a.options,
       data = _a.data,
@@ -28745,7 +28742,7 @@ var TrackMapPanel = function TrackMapPanel(_a) {
   var tracks = {};
   var labels = [];
   var intensities = [];
-  data.series.forEach(function (s, sIdx) {
+  data.series && data.series.forEach(function (s, sIdx) {
     var _a;
 
     var serieName = '';
@@ -28755,50 +28752,59 @@ var TrackMapPanel = function TrackMapPanel(_a) {
       serieViewTypes[serieName] = [];
     }
 
-    var trackss = s.fields.filter(function (f) {
+    var tt = s.fields.filter(function (f) {
       return f.name === 'track';
-    })[0].values.toArray();
-    var latitudes = s.fields.filter(function (f) {
+    })[0];
+    var trackss = tt && tt.values.toArray();
+    var lats = s.fields.filter(function (f) {
       return f.name === 'latitude';
-    })[0].values.toArray();
-    var longitudes = s.fields.filter(function (f) {
+    })[0];
+    var latitudes = lats && lats.values.toArray();
+    var lngs = s.fields.filter(function (f) {
       return f.name === 'longitude';
-    })[0].values.toArray();
-    intensities.push(s.fields.filter(function (f) {
+    })[0];
+    var longitudes = lngs && lngs.values.toArray();
+    var ii = s.fields.filter(function (f) {
       return f.name === 'intensity';
-    })[0].values.toArray());
-    var popups = s.fields.filter(function (f) {
+    })[0];
+    ii && intensities.push(ii.values.toArray());
+    var pp = s.fields.filter(function (f) {
       return f.name === 'popup';
-    })[0].values.toArray();
-    var tooltips = s.fields.filter(function (f) {
+    })[0];
+    var popups = pp && pp.values.toArray();
+    var tools = s.fields.filter(function (f) {
       return f.name === 'tooltip';
-    })[0].values.toArray();
-    (_a = s.fields.filter(function (f) {
+    })[0];
+    var tooltips = tools && tools.values.toArray();
+    var timestamps = s.fields.filter(function (f) {
       return f.name === 'timestamp';
-    })[0].values) === null || _a === void 0 ? void 0 : _a.toArray().forEach(function (t, trackIdx) {
-      var track = trackss[trackIdx];
-      var latitude = latitudes[trackIdx];
-      var longitude = longitudes[trackIdx];
-      var popup = popups[trackIdx]; //.replaceAll('\\n', '\n');;
+    })[0];
+    timestamps && ((_a = timestamps.values) === null || _a === void 0 ? void 0 : _a.toArray().forEach(function (t, trackIdx) {
+      var track = trackss && trackss[trackIdx];
+      var latitude = latitudes && latitudes[trackIdx];
+      var longitude = longitudes && longitudes[trackIdx];
+      var popup = popups && popups[trackIdx]; //.replaceAll('\\n', '\n');;
 
-      var tooltip = tooltips[trackIdx]; //.replaceAll('\\n', '\n');
+      var tooltip = tooltips && tooltips[trackIdx]; //.replaceAll('\\n', '\n');
 
       var labels = {};
 
-      if (tracks[track] === undefined) {
-        tracks[track] = {};
-        tracks[track].positions = [];
-      }
+      if (latitude) {
+        if (tracks[track] === undefined) {
+          tracks[track] = {};
+          tracks[track].positions = [];
+        }
 
-      tracks[track].name = serieName;
-      tracks[track].positions.push({
-        latitude: latitude,
-        longitude: longitude,
-        popup: popup,
-        tooltip: tooltip,
-        labels: labels
-      });
-    });
+        tracks[track].name = serieName;
+        tracks[track].positions.push({
+          latitude: latitude,
+          longitude: longitude,
+          popup: popup,
+          tooltip: tooltip,
+          labels: labels
+        });
+      }
+    }));
   });
   var i = 0;
   var positions = [];
@@ -28840,7 +28846,7 @@ var TrackMapPanel = function TrackMapPanel(_a) {
 
     var antOptions = {
       delay: options.ant.delay,
-      dashArray: [20, 2],
+      dashArray: [20, 5],
       weight: options.ant.weight,
       color: color,
       pulseColor: options.ant.pulseColor,
@@ -28880,6 +28886,10 @@ var TrackMapPanel = function TrackMapPanel(_a) {
     });
   });
 
+  var handleZoomEnd = function handleZoomEnd(event) {
+    console.log(event);
+  };
+
   var createMarkers = function createMarkers(positions, colorOverridesByQuery) {
     var markers = [];
 
@@ -28896,14 +28906,6 @@ var TrackMapPanel = function TrackMapPanel(_a) {
           }
 
           var size_1 = options.marker.size;
-          var overrideSize = options.marker.sizeOverridesByQuery.filter(function (c) {
-            return c.key === ps.name;
-          });
-
-          if (overrideSize.length === 1) {
-            size_1 = overrideSize[0].value;
-          }
-
           ps.positions.forEach(function (p, j) {
             if (p.latitude && p.longitude) {
               markers.push(react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["CircleMarker"], {
@@ -28940,29 +28942,6 @@ var TrackMapPanel = function TrackMapPanel(_a) {
     if (mapRef.current !== null) {
       mapRef.current.leafletElement.invalidateSize();
     }
-
-    updateMap(event.target.getBounds());
-  };
-
-  var updateQueryVariables = function updateQueryVariables(minLat, minLon, maxLat, maxLon) {
-    Object(_grafana_runtime__WEBPACK_IMPORTED_MODULE_7__["getLocationSrv"])().update({
-      query: {
-        'var-minLat': minLat,
-        'var-maxLat': maxLat,
-        'var-minLon': minLon,
-        'var-maxLon': maxLon
-      },
-      partial: true,
-      replace: true
-    });
-  };
-
-  var updateMap = function updateMap(bounds) {
-    var minLat = bounds.getSouthWest().lat;
-    var minLon = bounds.getSouthWest().lng;
-    var maxLat = bounds.getNorthEast().lat;
-    var maxLon = bounds.getNorthEast().lng;
-    updateQueryVariables(minLat, minLon, maxLat, maxLon);
   };
 
   var getBoundsFromPositions = function getBoundsFromPositions(positions) {
@@ -29016,29 +28995,15 @@ var TrackMapPanel = function TrackMapPanel(_a) {
       if (pp.length > 0) {
         var bounds = getBoundsFromPositions(pp);
         mapRef.current.leafletElement.fitBounds(bounds, {
-          animate: false
-        });
-        bounds = mapRef.current.leafletElement.getBounds();
-        updateMap(bounds);
+          animate: false,
+          maxZoom: 15
+        }); //bounds = mapRef.current.leafletElement.getBounds();
+        //updateMap(bounds);
       }
     }
   };
 
-  fitDataBounds(); //useEffect(() => {
-  // eslint-disable-next-line
-  //}, []);
-  // FIT TO DATA
-  //if (mapRef.current !== null) {
-  //  console.log('PLOOOOOOOOOOOOOP');
-  //  //if (options.ant.zoomToDataBounds) {
-  //  let bounds = getBoundsFromPositions(positions.map((p) => p.positions));
-  //  mapRef.current.leafletElement.fitBounds(bounds, { animate: false });
-  //  //}
-  //  bounds = mapRef.current.leafletElement.getBounds();
-  //  updateMap(bounds);
-  //}
-  //
-
+  fitDataBounds();
   var mapCenter = {
     latitude: options.map.centerLatitude,
     longitude: options.map.centerLongitude
@@ -29049,15 +29014,24 @@ var TrackMapPanel = function TrackMapPanel(_a) {
     antPaths = antData.map(function (d, i) {
       var _a;
 
-      if (d.data.length && d.data.length > 1) {
+      if (d.data.length && d.data.length > 0) {
         var popup = positions ? (_a = positions[i].positions.find(function (p) {
           return p.latitude && p.longitude;
         })) === null || _a === void 0 ? void 0 : _a.popup : undefined;
-        return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(AntPath, {
-          key: i,
-          positions: d.data,
-          options: d.options
-        }, popup ? react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(StyledPopup, null, popup) : null);
+
+        if (d.data.length === 1) {
+          return markers.push(react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["CircleMarker"], {
+            center: [positions[i].positions[0].latitude, positions[i].positions[0].longitude],
+            radius: options.ant.onePointSize,
+            color: options.ant.onePointColor
+          }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Popup"], null, positions[i].positions[0].popup), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["Tooltip"], null, positions[i].positions[0].popup)));
+        } else {
+          return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(AntPath, {
+            key: i,
+            positions: d.data,
+            options: d.options
+          }, popup ? react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(StyledPopup, null, popup) : null);
+        }
       } else {
         return null;
       }
@@ -29090,7 +29064,7 @@ var TrackMapPanel = function TrackMapPanel(_a) {
     intensityExtractor: function intensityExtractor(m) {
       return parseFloat(m[2]);
     }
-  }), options.viewTypes.includes('marker') && markers, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["TileLayer"], {
+  }), markers && markers.length > 0 && markers, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_leaflet__WEBPACK_IMPORTED_MODULE_3__["TileLayer"], {
     attribution: options.map.tileAttribution,
     url: options.map.tileUrl,
     accessToken: options.map.tileAccessToken !== '' ? options.map.tileAccessToken : undefined,
@@ -29099,7 +29073,7 @@ var TrackMapPanel = function TrackMapPanel(_a) {
     subdomains: options.map.tileSubDomains && options.map.tileSubDomains.length ? options.map.tileSubDomains : undefined
   })));
 };
-var getStyles = Object(_grafana_ui__WEBPACK_IMPORTED_MODULE_8__["stylesFactory"])(function () {
+var getStyles = Object(_grafana_ui__WEBPACK_IMPORTED_MODULE_7__["stylesFactory"])(function () {
   return {
     wrapper: Object(emotion__WEBPACK_IMPORTED_MODULE_2__["css"])(templateObject_3 || (templateObject_3 = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__makeTemplateObject"])(["\n      position: relative;\n    "], ["\n      position: relative;\n    "])))
   };
@@ -29357,197 +29331,6 @@ var plugin = new _grafana_data__WEBPACK_IMPORTED_MODULE_0__["PanelPlugin"](_Trac
 
 /***/ }),
 
-/***/ "./numberMapEditor.tsx":
-/*!*****************************!*\
-  !*** ./numberMapEditor.tsx ***!
-  \*****************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "../node_modules/tslib/tslib.es6.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
-/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _colorMapEditor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./colorMapEditor */ "./colorMapEditor.tsx");
-
-
-
-
-
-var NumberMapEditor =
-/** @class */
-function (_super) {
-  Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__extends"])(NumberMapEditor, _super);
-
-  function NumberMapEditor() {
-    var _this = _super !== null && _super.apply(this, arguments) || this;
-
-    _this.state = {
-      showAdd: false
-    };
-
-    _this.onRemoveKey = function (index) {
-      var _a = _this.props,
-          value = _a.value,
-          onChange = _a.onChange;
-
-      if (!value) {
-        value = [];
-      }
-
-      var copy = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(value);
-
-      copy.splice(index, 1);
-      onChange(copy);
-    };
-
-    _this.onValueChange = function (key, stringValue, idx, e) {
-      if (e) {
-        var evt = e;
-
-        if (e.hasOwnProperty('key')) {
-          if (evt.key !== 'Enter') {
-            return;
-          }
-        }
-      }
-
-      var _a = _this.props,
-          value = _a.value,
-          onChange = _a.onChange;
-
-      if (!value) {
-        value = [];
-      } // Form event, or Enter
-
-
-      if (idx < 0) {
-        if (key) {
-          if (e) {
-            var evt = e;
-            evt.currentTarget.value = ''; // reset last value
-          }
-
-          onChange(Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(value, [{
-            key: key,
-            value: stringValue
-          }]));
-        }
-
-        _this.setState({
-          showAdd: false
-        });
-
-        return;
-      }
-
-      if (!key) {
-        return _this.onRemoveKey(idx);
-      }
-
-      var copy = Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__spread"])(value);
-
-      copy[idx] = {
-        key: key,
-        value: stringValue
-      };
-      onChange(copy);
-    };
-
-    return _this;
-  }
-
-  NumberMapEditor.prototype.render = function () {
-    var _this = this;
-
-    var _a;
-
-    var _b = this.props,
-        value = _b.value,
-        item = _b.item;
-    var showAdd = this.state.showAdd;
-    var styles = Object(_colorMapEditor__WEBPACK_IMPORTED_MODULE_3__["getStyles"])(Object(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["getTheme"])());
-    var placeholder = ((_a = item.settings) === null || _a === void 0 ? void 0 : _a.placeholder) || 'Add query';
-    var inputs = null;
-
-    if (value) {
-      inputs = value.map(function (k, index) {
-        var prefix = react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-          className: styles.inputPrefix
-        }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"] // This is the HTML data
-        , {
-          // This is the HTML data
-          css: {},
-          className: styles.textInput,
-          key: index + "/" + k,
-          defaultValue: k.value || 2,
-          onBlur: function onBlur(e) {
-            _this.onValueChange(k.key, e.currentTarget.valueAsNumber, index, e);
-          },
-          onKeyDown: function onKeyDown(e) {
-            _this.onValueChange(k.key, e.currentTarget.valueAsNumber, index, e);
-          }
-        }));
-        return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
-          css: {},
-          className: styles.textInput,
-          key: index + "/" + k,
-          defaultValue: k.key || 'LABEL_VALUE',
-          onBlur: function onBlur(e) {
-            _this.onValueChange(e.currentTarget.value.trim(), k.value, index, e);
-          },
-          onKeyDown: function onKeyDown(e) {
-            _this.onValueChange(e.currentTarget.value.trim(), k.value, index, e);
-          },
-          prefix: prefix,
-          suffix: react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Icon"], {
-            className: styles.trashIcon,
-            name: "trash-alt",
-            onClick: function onClick() {
-              return _this.onRemoveKey(index);
-            }
-          })
-        });
-      });
-    }
-
-    return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, inputs, showAdd ? react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Input"], {
-      css: {},
-      autoFocus: true,
-      className: styles.textInput,
-      placeholder: placeholder,
-      defaultValue: '',
-      onBlur: function onBlur(e) {
-        return _this.onValueChange(e.currentTarget.value.trim(), 0, -1, e);
-      },
-      onKeyDown: function onKeyDown(e) {
-        return _this.onValueChange(e.currentTarget.value.trim(), 0, -1, e);
-      },
-      suffix: react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Icon"], {
-        name: "plus-circle"
-      })
-    }) : react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_2__["Button"], {
-      icon: "plus",
-      size: "sm",
-      variant: "secondary",
-      onClick: function onClick() {
-        return _this.setState({
-          showAdd: true
-        });
-      }
-    }, placeholder));
-  };
-
-  return NumberMapEditor;
-}(react__WEBPACK_IMPORTED_MODULE_1___default.a.PureComponent);
-
-/* harmony default export */ __webpack_exports__["default"] = (NumberMapEditor);
-
-/***/ }),
-
 /***/ "./options.tsx":
 /*!*********************!*\
   !*** ./options.tsx ***!
@@ -29559,8 +29342,6 @@ function (_super) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "optionsBuilder", function() { return optionsBuilder; });
 /* harmony import */ var _colorMapEditor__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./colorMapEditor */ "./colorMapEditor.tsx");
-/* harmony import */ var _numberMapEditor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./numberMapEditor */ "./numberMapEditor.tsx");
-
 
 var optionsBuilder = function optionsBuilder(builder) {
   return builder.addTextInput({
@@ -29658,6 +29439,22 @@ var optionsBuilder = function optionsBuilder(builder) {
     showIf: function showIf(config) {
       return config.viewTypes.includes('ant');
     }
+  }).addColorPicker({
+    category: ['Ant Path'],
+    path: 'ant.onePointColor',
+    name: 'One Point Color',
+    defaultValue: 'rgba(0, 100, 255, 1)',
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('ant');
+    }
+  }).addNumberInput({
+    category: ['Ant Path'],
+    path: 'ant.onePointSize',
+    name: 'One Point Size',
+    defaultValue: 5,
+    showIf: function showIf(config) {
+      return config.viewTypes.includes('ant');
+    }
   }).addSliderInput({
     category: ['Ant Path'],
     path: 'ant.opacity',
@@ -29751,7 +29548,7 @@ var optionsBuilder = function optionsBuilder(builder) {
     category: ['Markers'],
     path: 'marker.size',
     name: 'Size',
-    defaultValue: 25,
+    defaultValue: 5,
     showIf: function showIf(config) {
       return config.viewTypes.includes('marker');
     }
@@ -29761,16 +29558,6 @@ var optionsBuilder = function optionsBuilder(builder) {
     path: 'marker.colorOverridesByQuery',
     name: 'Color by query',
     editor: _colorMapEditor__WEBPACK_IMPORTED_MODULE_0__["default"],
-    defaultValue: [],
-    showIf: function showIf(config) {
-      return config.viewTypes.includes('marker');
-    }
-  }).addCustomEditor({
-    id: 'marker.sizeOverridesByQuery',
-    category: ['Markers'],
-    path: 'marker.sizeOverridesByQuery',
-    name: 'Size by query',
-    editor: _numberMapEditor__WEBPACK_IMPORTED_MODULE_1__["default"],
     defaultValue: [],
     showIf: function showIf(config) {
       return config.viewTypes.includes('marker');
@@ -29845,17 +29632,6 @@ var optionsBuilder = function optionsBuilder(builder) {
 /***/ (function(module, exports) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE__grafana_data__;
-
-/***/ }),
-
-/***/ "@grafana/runtime":
-/*!***********************************!*\
-  !*** external "@grafana/runtime" ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE__grafana_runtime__;
 
 /***/ }),
 

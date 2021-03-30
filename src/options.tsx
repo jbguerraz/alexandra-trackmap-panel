@@ -110,6 +110,20 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<TrackMapOption
         defaultValue: 'rgba(0, 100, 255, 0.2)',
         showIf: (config: TrackMapOptions) => config.viewTypes.includes('ant'),
       })
+      .addColorPicker({
+        category: ['Ant Path'],
+        path: 'ant.onePointColor',
+        name: 'One Point Color',
+        defaultValue: 'rgba(0, 100, 255, 1)',
+        showIf: (config: TrackMapOptions) => config.viewTypes.includes('ant'),
+      })
+      .addNumberInput({
+        category: ['Ant Path'],
+        path: 'ant.onePointSize',
+        name: 'One Point Size',
+        defaultValue: 5,
+        showIf: (config: TrackMapOptions) => config.viewTypes.includes('ant'),
+      })
       .addSliderInput({
         category: ['Ant Path'],
         path: 'ant.opacity',
@@ -193,7 +207,7 @@ export const optionsBuilder = (builder: PanelOptionsEditorBuilder<TrackMapOption
         category: ['Markers'],
         path: 'marker.size',
         name: 'Size',
-        defaultValue: 25,
+        defaultValue: 5,
         showIf: (config: TrackMapOptions) => config.viewTypes.includes('marker'),
       })
       .addCustomEditor({

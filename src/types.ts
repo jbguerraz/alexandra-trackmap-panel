@@ -30,6 +30,8 @@ export interface AntOptions {
   weight: number;
   color: string;
   pulseColor: string;
+  onePointColor: string;
+  onePointSize: number;
   opacity: number;
   paused: boolean;
   reverse: boolean;
@@ -54,6 +56,7 @@ interface MarkerOptions {
   size: number;
   colorOverridesByQuery: LabelColor[];
   zoomToDataBounds: boolean;
+  relativeSize: boolean;
 }
 
 interface HexOptions {

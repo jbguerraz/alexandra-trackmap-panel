@@ -3,7 +3,7 @@ import { Labels, PanelProps, Field } from '@grafana/data';
 import { Position, TrackMapOptions, AntData } from 'types';
 import { css, cx } from 'emotion';
 import { Feature, FeatureCollection } from 'geojson';
-import { CircleMarker, Map, Marker, Popup, TileLayer, Tooltip, withLeaflet } from 'react-leaflet';
+import { Circle, CircleMarker, Map, Marker, Popup, TileLayer, Tooltip, withLeaflet } from 'react-leaflet';
 import { DivIcon, LatLngBounds, LatLngBoundsExpression, LeafletEvent } from 'leaflet';
 import './leaflet.css';
 import 'leaflet/dist/leaflet.css';
@@ -48,42 +48,50 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
   let labels: Array<Labels | undefined> = [] as Labels[];
   let intensities: number[][] = [] as number[][];
 
-  data.series.forEach((s, sIdx) => {
-    let serieName = '';
-    if (s.refId !== undefined) {
-      serieName = s.refId;
-      serieViewTypes[serieName] = [];
-    }
-    let trackss = s.fields.filter((f) => f.name === 'track')[0].values.toArray() as string[];
-    let latitudes = s.fields.filter((f) => f.name === 'latitude')[0].values.toArray() as number[];
-    let longitudes = s.fields.filter((f) => f.name === 'longitude')[0].values.toArray() as number[];
-    intensities.push(s.fields.filter((f) => f.name === 'intensity')[0].values.toArray() as number[]);
-    let popups = s.fields.filter((f) => f.name === 'popup')[0].values.toArray() as string[];
-    let tooltips = s.fields.filter((f) => f.name === 'tooltip')[0].values.toArray() as string[];
-    s.fields
-      .filter((f) => f.name === 'timestamp')[0]
-      .values?.toArray()
-      .forEach((t, trackIdx) => {
-        let track = trackss[trackIdx];
-        let latitude = latitudes[trackIdx];
-        let longitude = longitudes[trackIdx];
-        let popup = popups[trackIdx]; //.replaceAll('\\n', '\n');;
-        let tooltip = tooltips[trackIdx]; //.replaceAll('\\n', '\n');
-        let labels: Labels = {};
-        if (tracks[track] === undefined) {
-          tracks[track] = {} as SeriePositions;
-          tracks[track].positions = [] as Position[];
-        }
-        tracks[track].name = serieName;
-        tracks[track].positions.push({
-          latitude,
-          longitude,
-          popup,
-          tooltip,
-          labels,
+  data.series &&
+    data.series.forEach((s, sIdx) => {
+      let serieName = '';
+      if (s.refId !== undefined) {
+        serieName = s.refId;
+        serieViewTypes[serieName] = [];
+      }
+      let tt = s.fields.filter((f) => f.name === 'track')[0];
+      let trackss = tt && (tt.values.toArray() as string[]);
+      let lats = s.fields.filter((f) => f.name === 'latitude')[0];
+      let latitudes = lats && (lats.values.toArray() as number[]);
+      let lngs = s.fields.filter((f) => f.name === 'longitude')[0];
+      let longitudes = lngs && (lngs.values.toArray() as number[]);
+      let ii = s.fields.filter((f) => f.name === 'intensity')[0];
+      ii && intensities.push(ii.values.toArray() as number[]);
+      let pp = s.fields.filter((f) => f.name === 'popup')[0];
+      let popups = pp && (pp.values.toArray() as string[]);
+      let tools = s.fields.filter((f) => f.name === 'tooltip')[0];
+      let tooltips = tools && (tools.values.toArray() as string[]);
+      let timestamps = s.fields.filter((f) => f.name === 'timestamp')[0];
+      timestamps &&
+        timestamps.values?.toArray().forEach((t, trackIdx) => {
+          let track = trackss && trackss[trackIdx];
+          let latitude = latitudes && latitudes[trackIdx];
+          let longitude = longitudes && longitudes[trackIdx];
+          let popup = popups && popups[trackIdx]; //.replaceAll('\\n', '\n');;
+          let tooltip = tooltips && tooltips[trackIdx]; //.replaceAll('\\n', '\n');
+          let labels: Labels = {};
+          if (latitude) {
+            if (tracks[track] === undefined) {
+              tracks[track] = {} as SeriePositions;
+              tracks[track].positions = [] as Position[];
+            }
+            tracks[track].name = serieName;
+            tracks[track].positions.push({
+              latitude,
+              longitude,
+              popup,
+              tooltip,
+              labels,
+            });
+          }
         });
-      });
-  });
+    });
   let i = 0;
   let positions: SeriePositions[] = [];
   for (let track in tracks) {
@@ -151,6 +159,9 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
       data: antDatas,
     });
   });
+  const handleZoomEnd = (event: LeafletEvent) => {
+    console.log(event);
+  };
 
   const createMarkers = (positions: SeriePositions[], colorOverridesByQuery: LabelColor[]): ReactElement[] => {
     let markers: ReactElement[] = [];
@@ -196,28 +207,6 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
     if (mapRef.current !== null) {
       mapRef.current.leafletElement.invalidateSize();
     }
-    updateMap(event.target.getBounds());
-  };
-
-  const updateQueryVariables = (minLat: number, minLon: number, maxLat: number, maxLon: number) => {
-    getLocationSrv().update({
-      query: {
-        'var-minLat': minLat,
-        'var-maxLat': maxLat,
-        'var-minLon': minLon,
-        'var-maxLon': maxLon,
-      },
-      partial: true,
-      replace: true,
-    });
-  };
-
-  const updateMap = (bounds: LatLngBounds) => {
-    const minLat = bounds.getSouthWest().lat;
-    const minLon = bounds.getSouthWest().lng;
-    const maxLat = bounds.getNorthEast().lat;
-    const maxLon = bounds.getNorthEast().lng;
-    updateQueryVariables(minLat, minLon, maxLat, maxLon);
   };
 
   const getBoundsFromPositions = (positions: Position[][] | undefined): LatLngBoundsExpression => {
@@ -260,28 +249,11 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
         .map((p) => p.positions);
       if (pp.length > 0) {
         let bounds = getBoundsFromPositions(pp);
-        mapRef.current.leafletElement.fitBounds(bounds, { animate: false });
-        bounds = mapRef.current.leafletElement.getBounds();
-        updateMap(bounds);
+        mapRef.current.leafletElement.fitBounds(bounds, { animate: false, maxZoom: 15 });
       }
     }
   };
   fitDataBounds();
-  //useEffect(() => {
-  // eslint-disable-next-line
-  //}, []);
-
-  // FIT TO DATA
-  //if (mapRef.current !== null) {
-  //  console.log('PLOOOOOOOOOOOOOP');
-  //  //if (options.ant.zoomToDataBounds) {
-  //  let bounds = getBoundsFromPositions(positions.map((p) => p.positions));
-  //  mapRef.current.leafletElement.fitBounds(bounds, { animate: false });
-  //  //}
-  //  bounds = mapRef.current.leafletElement.getBounds();
-  //  updateMap(bounds);
-  //}
-  //
 
   const mapCenter: Position = {
     latitude: options.map.centerLatitude,
@@ -291,13 +263,26 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
   let antPaths = null;
   if (options.viewTypes.includes('ant')) {
     antPaths = antData.map((d, i) => {
-      if (d.data.length && d.data.length > 1) {
+      if (d.data.length && d.data.length > 0) {
         const popup = positions ? positions[i].positions.find((p) => p.latitude && p.longitude)?.popup : undefined;
-        return (
-          <AntPath key={i} positions={d.data} options={d.options}>
-            {popup ? <StyledPopup>{popup}</StyledPopup> : null}
-          </AntPath>
-        );
+        if (d.data.length === 1) {
+          return markers.push(
+            <CircleMarker
+              center={[positions[i].positions[0].latitude, positions[i].positions[0].longitude]}
+              radius={options.ant.onePointSize}
+              color={options.ant.onePointColor}
+            >
+              <Popup>{positions[i].positions[0].popup}</Popup>
+              <Tooltip>{positions[i].positions[0].popup}</Tooltip>
+            </CircleMarker>
+          );
+        } else {
+          return (
+            <AntPath key={i} positions={d.data} options={d.options}>
+              {popup ? <StyledPopup>{popup}</StyledPopup> : null}
+            </AntPath>
+          );
+        }
       } else {
         return null;
       }
@@ -335,7 +320,7 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
             intensityExtractor={(m: any) => parseFloat(m[2])}
           />
         )}
-        {options.viewTypes.includes('marker') && markers}
+        {markers && markers.length > 0 && markers}
         <TileLayer
           attribution={options.map.tileAttribution}
           url={options.map.tileUrl}

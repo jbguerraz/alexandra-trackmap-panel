@@ -265,12 +265,12 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
     antPaths = antData.map((d, i) => {
       if (d.data.length && d.data.length > 0) {
         const popup = positions ? positions[i].positions.find((p) => p.latitude && p.longitude)?.popup : undefined;
-        let onePosition = true
-        let ref = positions[i].positions[0]
+        let onePosition = true;
+        let ref = positions[i].positions[0];
         for (let position of positions[i].positions) {
           if (position.latitude !== ref.latitude || position.longitude !== ref.longitude) {
-            onePosition = false
-            break
+            onePosition = false;
+            break;
           }
         }
         if (onePosition === true) {

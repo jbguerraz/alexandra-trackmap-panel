@@ -20,7 +20,8 @@ interface Props extends PanelProps<TrackMapOptions> {}
 
 const StyledPopup = styled(Popup)`
   .leaflet-popup-content-wrapper {
-    white-space: pre-wrap;
+    white-space: nowrap;
+    word-wrap: nowrap;
     color: black !important;
   }
 
@@ -28,10 +29,15 @@ const StyledPopup = styled(Popup)`
     visibility: hidden;
   }
 `;
+const css = {
+  whiteSpace: 'nowrap',
+  wordWrap: 'nowrap'
+}
 
 export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height }) => {
   const styles = getStyles();
   const mapRef = useRef<Map | null>(null);
+
 
   const WrappedHexbinLayer: any = withLeaflet(HexbinLayer);
 
@@ -179,10 +185,10 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
               markers.push(
                 <CircleMarker center={[p.latitude, p.longitude]} radius={size} color={color}>
                   <Popup>
-                    <div style={{ whiteSpace: 'pre-line' }}>{p.popup}</div>
+                    <div style={css}>{p.popup}</div>
                   </Popup>
                   <Tooltip>
-                    <div style={{ whiteSpace: 'pre-line' }}>{p.popup}</div>
+                    <div style={css}>{p.tooltip}</div>
                   </Tooltip>
                 </CircleMarker>
               );
@@ -280,14 +286,14 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
               radius={options.ant.onePointSize}
               color={options.ant.onePointColor}
             >
-              <Popup>{ref.popup && ref.popup.replace(/ /g, '&nbsp;')}</Popup>
-              <Tooltip>{ref.popup && ref.popup.replace(/ /g, '&nbsp;')}</Tooltip>
+              <Popup><div style={css}>{ref.popup && ref.popup}</div></Popup>
+              <Tooltip><div style={css}>{ref.tooltip && ref.tooltip}</div></Popup>
             </CircleMarker>
           );
         } else {
           return (
             <AntPath key={i} positions={d.data} options={d.options}>
-              {popup ? <StyledPopup>{popup.replace(/ /g, '&nbsp;')}</StyledPopup> : null}
+              tooltip{popup ? <StyledPopup>{popup}</StyledPopup> : null}
             </AntPath>
           );
         }

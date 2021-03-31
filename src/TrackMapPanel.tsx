@@ -280,14 +280,14 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
               radius={options.ant.onePointSize}
               color={options.ant.onePointColor}
             >
-              <Popup>{ref && ref.popup.replace(/ /g, '&nbsp;')}</Popup>
-              <Tooltip>{ref && ref.popup.replace(/ /g, '&nbsp;')}</Tooltip>
+              <Popup>{ref.popup && ref.popup.replace(/ /g, '&nbsp;')}</Popup>
+              <Tooltip>{ref.popup && ref.popup.replace(/ /g, '&nbsp;')}</Tooltip>
             </CircleMarker>
           );
         } else {
           return (
             <AntPath key={i} positions={d.data} options={d.options}>
-              {popup ? <StyledPopup>{popup.replaceAll('', '&nbsp;')}</StyledPopup> : null}
+              {popup ? <StyledPopup>{popup.replace(/ /g, '&nbsp;')}</StyledPopup> : null}
             </AntPath>
           );
         }

@@ -32,7 +32,7 @@ const StyledPopup = styled(Popup)`
 const Css = {
   whiteSpace: 'nowrap',
   wordWrap: 'nowrap',
-}
+};
 
 export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height }) => {
   const styles = getStyles();

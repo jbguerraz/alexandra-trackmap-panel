@@ -7,7 +7,7 @@ import { Circle, CircleMarker, Map, Marker, Popup, TileLayer, Tooltip, withLeafl
 import { DivIcon, LatLngBounds, LatLngBoundsExpression, LeafletEvent } from 'leaflet';
 import './leaflet.css';
 import 'leaflet/dist/leaflet.css';
-import styled from 'styled-components';
+//import styled from 'styled-components';
 import { getLocationSrv } from '@grafana/runtime';
 import { stylesFactory } from '@grafana/ui';
 import { LabelColor } from './colorMapEditor';
@@ -18,17 +18,17 @@ const HexbinLayer = require('react-leaflet-d3').HexbinLayer;
 
 interface Props extends PanelProps<TrackMapOptions> {}
 
-const StyledPopup = styled(Popup)`
-  .leaflet-popup-content-wrapper {
-    white-space: nowrap;
-    word-wrap: nowrap;
-    color: black !important;
-  }
-
-  .leaflet-popup-tip-container {
-    visibility: hidden;
-  }
-`;
+//const StyledPopup = styled(Popup)`
+//  .leaflet-popup-content-wrapper {
+//    white-space: nowrap;
+//    word-wrap: nowrap;
+//    color: black !important;
+//  }
+//
+//  .leaflet-popup-tip-container {
+//    visibility: hidden;
+//  }
+//`;
 
 export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height }) => {
   const styles = getStyles();
@@ -292,7 +292,9 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
         } else {
           return (
             <AntPath key={i} positions={d.data} options={d.options}>
-              tooltip{popup ? <StyledPopup>{popup}</StyledPopup> : null}
+              <Popup>
+                <div dangerouslySetInnerHTML={{ __html: popup! }}></div>
+              </Popup>
             </AntPath>
           );
         }

@@ -30,10 +30,6 @@ const StyledPopup = styled(Popup)`
   }
 `;
 
-const Css = {
-  whiteSpace: 'nowrap',
-} as React.CSSProperties;
-
 export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height }) => {
   const styles = getStyles();
   const mapRef = useRef<Map | null>(null);
@@ -184,10 +180,10 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
               markers.push(
                 <CircleMarker center={[p.latitude, p.longitude]} radius={size} color={color}>
                   <Popup>
-                    <div style={Css}>{p.popup}</div>
+                    <div dangerouslySetInnerHTML={{__html: p.popup}}></div>
                   </Popup>
                   <Tooltip>
-                    <div style={Css}>{p.tooltip}</div>
+                    <div dangerouslySetInnerHTML={{__html: p.tooltip}}></div>
                   </Tooltip>
                 </CircleMarker>
               );
@@ -286,10 +282,10 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
               color={options.ant.onePointColor}
             >
               <Popup>
-                <div style={Css}>{ref.popup && ref.popup}</div>
+                <div dangerouslySetInnerHTML={{__html: ref.popup && ref.popup}}></div>
               </Popup>
               <Tooltip>
-                <div style={Css}>{ref.tooltip && ref.tooltip}</div>
+                <div dangerouslySetInnerHTML={{__html: ref.tooltip && ref.tooltip}}></div>
               </Tooltip>
             </CircleMarker>
           );

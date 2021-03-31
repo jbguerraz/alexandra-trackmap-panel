@@ -282,10 +282,10 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
               color={options.ant.onePointColor}
             >
               <Popup>
-                <div dangerouslySetInnerHTML={{ __html: ref.popup && ref.popup! }}></div>
+                <div dangerouslySetInnerHTML={{ __html: ref.popup! }}></div>
               </Popup>
               <Tooltip>
-                <div dangerouslySetInnerHTML={{ __html: ref.tooltip && ref.tooltip! }}></div>
+                <div dangerouslySetInnerHTML={{ __html: ref.tooltip! }}></div>
               </Tooltip>
             </CircleMarker>
           );

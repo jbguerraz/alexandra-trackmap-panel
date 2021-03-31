@@ -79,8 +79,8 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
           let track = trackss && trackss[trackIdx];
           let latitude = latitudes && latitudes[trackIdx];
           let longitude = longitudes && longitudes[trackIdx];
-          let popup = popups && popups[trackIdx].replace(/ /g, '&nbsp;');
-          let tooltip = tooltips && tooltips[trackIdx].replace(/ /g, '&nbsp;');
+          let popup = popups && popups[trackIdx]
+          let tooltip = tooltips && tooltips[trackIdx]
           let labels: Labels = {};
           if (latitude) {
             if (tracks[track] === undefined) {
@@ -287,7 +287,7 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
               color={options.ant.onePointColor}
             >
               <Popup><div style={css}>{ref.popup && ref.popup}</div></Popup>
-              <Tooltip><div style={css}>{ref.tooltip && ref.tooltip}</div></Popup>
+              <Tooltip><div style={css}>{ref.tooltip && ref.tooltip}</div></Tooltip>
             </CircleMarker>
           );
         } else {

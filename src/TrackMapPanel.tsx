@@ -29,15 +29,14 @@ const StyledPopup = styled(Popup)`
     visibility: hidden;
   }
 `;
-const css = {
+const Css = {
   whiteSpace: 'nowrap',
-  wordWrap: 'nowrap'
+  wordWrap: 'nowrap',
 }
 
 export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height }) => {
   const styles = getStyles();
   const mapRef = useRef<Map | null>(null);
-
 
   const WrappedHexbinLayer: any = withLeaflet(HexbinLayer);
 
@@ -79,8 +78,8 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
           let track = trackss && trackss[trackIdx];
           let latitude = latitudes && latitudes[trackIdx];
           let longitude = longitudes && longitudes[trackIdx];
-          let popup = popups && popups[trackIdx]
-          let tooltip = tooltips && tooltips[trackIdx]
+          let popup = popups && popups[trackIdx];
+          let tooltip = tooltips && tooltips[trackIdx];
           let labels: Labels = {};
           if (latitude) {
             if (tracks[track] === undefined) {
@@ -185,10 +184,10 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
               markers.push(
                 <CircleMarker center={[p.latitude, p.longitude]} radius={size} color={color}>
                   <Popup>
-                    <div style={css}>{p.popup}</div>
+                    <div style={Css}>{p.popup}</div>
                   </Popup>
                   <Tooltip>
-                    <div style={css}>{p.tooltip}</div>
+                    <div style={Css}>{p.tooltip}</div>
                   </Tooltip>
                 </CircleMarker>
               );
@@ -286,8 +285,12 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
               radius={options.ant.onePointSize}
               color={options.ant.onePointColor}
             >
-              <Popup><div style={css}>{ref.popup && ref.popup}</div></Popup>
-              <Tooltip><div style={css}>{ref.tooltip && ref.tooltip}</div></Tooltip>
+              <Popup>
+                <div style={Css}>{ref.popup && ref.popup}</div>
+              </Popup>
+              <Tooltip>
+                <div style={Css}>{ref.tooltip && ref.tooltip}</div>
+              </Tooltip>
             </CircleMarker>
           );
         } else {

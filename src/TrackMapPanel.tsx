@@ -73,8 +73,8 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
           let track = trackss && trackss[trackIdx];
           let latitude = latitudes && latitudes[trackIdx];
           let longitude = longitudes && longitudes[trackIdx];
-          let popup = popups && popups[trackIdx].replaceAll(' ', '&nbsp;');
-          let tooltip = tooltips && tooltips[trackIdx].replaceAll(' ', '&nbsp;');
+          let popup = popups && popups[trackIdx].replace(/ /g, '&nbsp;');
+          let tooltip = tooltips && tooltips[trackIdx].replace(/ /g, '&nbsp;');
           let labels: Labels = {};
           if (latitude) {
             if (tracks[track] === undefined) {
@@ -280,8 +280,8 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
               radius={options.ant.onePointSize}
               color={options.ant.onePointColor}
             >
-              <Popup>{ref.popup.replaceAll(' ', '&nbsp;')}</Popup>
-              <Tooltip>{ref.popup.replaceAll('', '&nbsp;')}</Tooltip>
+              <Popup>{ref && ref.popup.replace(/ /g, '&nbsp;')}</Popup>
+              <Tooltip>{ref && ref.popup.replace(/ /g, '&nbsp;')}</Tooltip>
             </CircleMarker>
           );
         } else {
@@ -328,7 +328,7 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
             intensityExtractor={(m: any) => parseFloat(m[2])}
           />
         )}
-        {markers && markers.length > 0 && markers}
+        {markers.length > 0 && markers}
         <TileLayer
           attribution={options.map.tileAttribution}
           url={options.map.tileUrl}

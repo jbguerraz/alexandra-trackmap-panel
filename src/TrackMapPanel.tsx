@@ -73,8 +73,8 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
           let track = trackss && trackss[trackIdx];
           let latitude = latitudes && latitudes[trackIdx];
           let longitude = longitudes && longitudes[trackIdx];
-          let popup = popups && popups[trackIdx]; //.replaceAll('\\n', '\n');;
-          let tooltip = tooltips && tooltips[trackIdx]; //.replaceAll('\\n', '\n');
+          let popup = popups && popups[trackIdx].replaceAll(' ', '&nbsp;');
+          let tooltip = tooltips && tooltips[trackIdx].replaceAll(' ', '&nbsp;');
           let labels: Labels = {};
           if (latitude) {
             if (tracks[track] === undefined) {
@@ -266,7 +266,7 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
       if (d.data.length && d.data.length > 0) {
         const popup = positions ? positions[i].positions.find((p) => p.latitude && p.longitude)?.popup : undefined;
         let onePosition = true;
-        let ref = positions[i].positions[0];
+        let ref = positions[i].positions[positions[i].positions.length - 1];
         for (let position of positions[i].positions) {
           if (position.latitude !== ref.latitude || position.longitude !== ref.longitude) {
             onePosition = false;
@@ -280,14 +280,14 @@ export const TrackMapPanel: React.FC<Props> = ({ options, data, width, height })
               radius={options.ant.onePointSize}
               color={options.ant.onePointColor}
             >
-              <Popup>{ref.popup}</Popup>
-              <Tooltip>{ref.popup}</Tooltip>
+              <Popup>{ref.popup.replaceAll(' ', '&nbsp;')}</Popup>
+              <Tooltip>{ref.popup.replaceAll('', '&nbsp;')}</Tooltip>
             </CircleMarker>
           );
         } else {
           return (
             <AntPath key={i} positions={d.data} options={d.options}>
-              {popup ? <StyledPopup>{popup}</StyledPopup> : null}
+              {popup ? <StyledPopup>{popup.replaceAll('', '&nbsp;')}</StyledPopup> : null}
             </AntPath>
           );
         }
